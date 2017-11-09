@@ -1,0 +1,324 @@
+\documentclass[a4paper, 8pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{framed}
+\usepackage[margin=0.7cm]{geometry}
+\usepackage{varwidth}
+\usepackage{multicol}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[babel=true]{csquotes}
+\usepackage{titlesec}
+ \usepackage[usenames,dvipsnames,pdf]{pstricks}
+ \usepackage{epsfig}
+ \usepackage{pst-grad} % For gradients
+ \usepackage{pst-plot} % For axes
+ \usepackage[space]{grffile} % For spaces in paths
+ \usepackage{etoolbox} % For spaces in paths
+\usepackage[vlined, boxruled]{algorithm2e}
+\usepackage{pgf,tikz}
+\usetikzlibrary{arrows}
+\tikzset{
+  font={\fontsize{7pt}{12}\selectfont}}
+\usetikzlibrary{graphs}
+
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist 
+
+\titleformat{\section}
+ {\sffamily\Large\bfseries\raggedleft}{\thesection}{1em}{}[{\titlerule[1pt]}]
+ 
+ 
+\titleformat{\subsection}
+ {\sffamily\large\bfseries\centering}{\thesection}{0em}{}[{\titlerule[0pt]}]
+
+
+\title{\sffamily\textbf{Fiche de révision \\ INF101} \thanks{Cours suivi avec Olivier \bsc{Hudry} }}
+\author{Antonin \bsc{Godard}}
+\date{}
+
+\begin{document}
+
+\begin{multicols*}{3}
+\setlength{\parindent}{0pt}
+\maketitle
+
+\begin{changemargin}{0.5cm}{0.5cm} 
+{\footnotesize Ce document est à lire après avoir suivi le cours. Le document fait donc l'hypothèse que le lecteur connaît au préalable les notions dont le document parle.}
+\end{changemargin}
+
+
+\textbf{Complexité:} mesure du temps nécessaire de calcul pour finir l'algorithme.\\ Soit $(P)$ un problème. Soit $I$ une instance de $(P)$. Soit $A$ un algorithme pour $(P)$.\\ Soit $f_A(I)$ le nombre d'opérations élémentaires effectuées pour compléter $I$. On définit alors $c_A$ par :
+\[
+\begin{array}{cc|ccl}
+c_A & : & \mathbb{N} & \to & \mathbb{N} \\
+ & & n & \mapsto & \max(f_A(I)) \\
+\end{array}
+\]
+
+\section*{Structures de Données}
+
+\textbf{Variables:} emplacement précis en mémoire. Possède une adresse et une taille variable.
+
+\textbf{Tableau:} collection de variables. Contient des cases numérotées. Caractérisé par :\begin{itemize}
+\item son adresse
+\item sa taille
+\item nature des entités conservées (de même type pour un tableau).
+\end{itemize}
+On accède à l'adresse via :\\ $ T\left[ i\right] = T\left[ 0\right] + i\times t $. ($t$ : taille).
+
+\textbf{Listes chaînées :} suite de données homogènes (même type) auxquelles on accède de proche en proche, chaque donnée contenant l'adresse de l'élément suivant. Avantage : pas de problème de dimensionnement. Inconvénient : plus d'accès direct.
+
+\textbf{Pile :} collection ordonnée de données respectant la stratégie \enquote{Last in, first out} (LIFO).
+
+\textbf{File :} De même, \enquote{First in, first out} (FIFO).
+
+\textbf{Arbres :} Un arbre $A$ est de la forme $A = (R, \underbrace{A_1, \ldots, A_k}_{\text{Arbres}})$. $R$ est la racine l'arbre $A$.
+
+\textbf{Terminologie :}Soit $N$ un nœud de $A$.
+\begin{itemize}
+\item Les fils de $N$ sont les racines des sous-arbres de $N$;
+\item Un nœud interne est un nœud admettant au moins 1 fils;
+\item une feuille est un nœud n'ayant pas de fils;
+\item tout nœud autre que la racine admet un père unique.
+\end{itemize}
+
+Profondeur de $N$ dans $A$ :
+\[
+\begin{array}{rc|l}
+\text{prof}(N) & = & 0 \textit{ si } N=R  \\
+ & & \text{prof}(\text{père de }N) \textit{ sinon.}  \\
+\end{array}
+\]
+
+Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
+
+\textbf{Arbre complet :} Chaque nœud a deux fils.
+
+\textbf{Arbre parfait :} $\forall i$, $(0 \leqslant i < h)$, le niveau $i$ est saturé.
+
+\section*{Tri}
+
+\textbf{Problème :} On dispose d'une collection de $n$ éléments, on souhaite les ordonner sous forme croissante.
+
+\textbf{Tri insertion :} \`{A} la $i$\ieme étape, on considère les $i$ premier éléments triés, l'élément $i+1$ est alors inséré dans les éléments déjà triés par comparaison.
+\begin{algorithm}[H]
+ \KwData{$T$ tableau d'indices 1 à $n$}
+ \For{$i$ variant de 2 à $n$}{
+  $j \longleftarrow i$ \;
+  $cle \longleftarrow T\left[j\right]$ \;
+  \While{$j \geqslant 2$ et $T\left[j\right] > cle$}{
+  	$T\left[j\right] \longleftarrow T\left[j-1\right]$ \;
+  	$j \longleftarrow j-1$ \;
+  }
+  $T\left[j\right] \longleftarrow cle$ \;
+ }
+ \caption{Tri Insertion}
+\end{algorithm}
+
+\textbf{Tri sélection :} On cherche le plus petit élément, on le met à la 1\iere position; on cherche le 2\ieme plus petit, et etc$\hdots$
+
+\begin{algorithm}[H]
+ \KwData{$T$ tableau d'indices 1 à $n$}
+ \For{$i$ variant de 1 à $n-1$}{
+  $indicePetit \longleftarrow i$ \;
+  $min \longleftarrow T\left[i\right]$ \;
+  \For{$j$ variant de 1 à $n+1$}{
+  \If{$T\left[j\right] < min$}{
+  		$indicePetit \longleftarrow j$ \;
+  		$min \longleftarrow T\left[j\right]$ \;
+  	}
+  	échanger($T$, $i$, $indicePetit$) \;
+  }
+ }
+ \caption{Tri Sélection}
+\end{algorithm}
+
+\textbf{Tri rapide :} On utilise une fonction nommée $partition$ sur une liste qui sélectionne une donnée $cle$, et qui range les données plus petites que $cle$ à gauche de $cle$, puis range à droite de $cle$ les éléments plus grand que $cle$. Il est défini récursivement la plupart du temps.
+\begin{algorithm}[H]
+ \KwData{Données du tableau $T$ entre les indices $g$ et $d$}
+  $cle \longleftarrow T\left[g\right]$ \;
+  $i \longleftarrow g+1$ \;
+  $j \longleftarrow d1$ \;
+  \While{$j \geqslant i$}{
+  	\While{$i \leqslant j$ et $T\left[i\right] \leqslant cle$}{$i \longleftarrow i+1$\;}
+  	\While{$T\left[j\right] > cle$}{$j \longleftarrow j-1$\;}
+  	\If{$i < j$}{
+  		échanger($T$,$i$,$j$) \;
+  		$i \longleftarrow i+1$\;
+  		$j \longleftarrow j-1$\;
+  	}
+  }
+  	échanger($T$,$g$,$j$)\;
+  	\Return{j}
+ \caption{partition($g$,$d$)}
+\end{algorithm}
+\begin{algorithm}[H]
+ \KwData{$j$}
+ \If{$g \leqslant d $}{
+ 	$j \longleftarrow$ partition($g$,$d$)\;
+ 	tri\_rapide($g$,$j-1$)\;
+ 	tri\_rapide($j+1$,$d$)\;
+ }
+ \caption{tri\_rapide($g$,$d$)}
+\end{algorithm}
+
+\begin{tikzpicture}
+\node {root}
+[level distance=7mm,
+level 1/.style={sibling distance=20mm},
+level 2/.style={sibling distance=10mm},
+level 3/.style={sibling distance=5mm}]
+child {node {left}
+	child { node {child}}
+	child {node {child}}
+	}
+child {node {right}
+	child {node {child}}
+	child {node {child}}
+};
+\end{tikzpicture}
+
+\section*{Codage de \bsc{Huffman}}
+
+\section*{Théorie des graphes}
+
+\subsection*{Graphes Non-Orientés}
+Un graphe non-orienté $G = (X,A)$ est un couple d'ensembles finis avec :
+\begin{itemize}
+\item $X = \left\{\text{sommets}\right\}$
+\item $A = \left\{\mathbf{ar\hat{e}tes}\right\}$, les arêtes étant de la forme $\{x,y\}$ (le sens compte).
+\item $m = \Omega(X)$ (cardinal)
+\item $n = \Omega(Y)$
+\item Pour une arête $a = \{x,y\}$ :
+	\begin{itemize}
+	\item $a$ est adjacente à $x$ et $y$
+	\item $x$ et $y$ sont les extrémités de $a$
+	\item $x$ et $y$ sont voisins
+	\end{itemize}
+\item Voisinage de $x$\\ $V(x) = \{y \in X / \{x,y\} \in A$
+\item $d(x) = \Omega(V(x))$ et \begin{flushright}
+$\sum_{x\in X}{d(x)} = 2m$
+\end{flushright}
+\item Chaîne : suite de sommets $x_1,x_2,\hdots,x_k$ avec :
+\begin{enumerate}
+\item $\forall \, 1\leqslant i \leqslant k \quad  x_i \in X$
+\item $\forall \, 1\leqslant i \leqslant k-1 \quad \{x_i,x_{i+1}\} \in A$
+\item $\forall \, 1< i< k \quad x_{i-1} \neq x_{i+1}$
+\end{enumerate}
+\item Chaîne simple (resp. élémentaire) : ne passe pas $2\times$ par une même arête (resp. sommet)
+\item $x_1,x_2,\hdots,x_k$ élémentaire $\Longleftrightarrow \quad \forall \, 1\leqslant i,j \leqslant k \quad  x_i \neq x_j$
+\item Cycle : suite de sommets $x_1,x_2,\hdots,x_k,(x_1)$ avec :
+\begin{enumerate}
+\item $\forall \, 1\leqslant i \leqslant k \quad  x_i \in X$
+\item $\forall \, 1\leqslant i \leqslant k-1 \quad \{x_i,x_{i+1}\} \in A \,et\, \{x_k,x_{1}\} \in A$
+\item $\forall \, 1< i< k \quad x_{i-1} \neq x_{i+1}$ \\$ et\, x_2 \neq x_k \,et\, x_1 \neq x_{k-1}$
+\end{enumerate}
+\item $G$ est dit connexe si $\forall\,x,y\in X \quad \exists\,\text{chaîne entre}\,x\,\text{et}\,y$. On définit de même les composantes connexes qui sont les sous-graphes connexes de $G$.
+\item Une arête de $G$ est un \textit{isthme} si la suppression de cette arête fait croître le nombre de composantes connexes de $G$.
+\item Un arbre est un graphe connexe sans cycle.
+\end{itemize}
+
+Exemple :
+\begin{center}
+\begin{tikzpicture}[scale = 1.5]
+
+\tikzset{vertex/.style = {inner sep=2pt, draw = none}}
+\tikzset{edge/.style = {-}}
+% vertices
+
+\node[vertex] (a) at  (0.3,1.5) {$a$};
+\node[vertex] (b) at  (-.5,0) {$b$};
+\node[vertex] (c) at  (.5,1) {$c$};
+\node[vertex] (d) at  (1,0) {$d$};
+\node[vertex] (e) at  (1.7,1) {$e$};
+\node[vertex] (f) at  (-1,1) {$f$};
+
+
+%edges
+\draw[edge] (a) to node[below]{7} (b);
+\draw[edge] (a) to node[right]{3} (c);
+\draw[edge] (f) to node[above]{4}(c);
+\draw[edge] (e) to node[above]{0} (c);
+\draw[edge] (d) to node[right]{-5} (e);
+\draw[edge] (b) to node[below]{3} (d);
+\draw[edge] (b) to node[left]{-1} (f);
+\draw[edge] (d) to node[left]{-2} (c);
+\end{tikzpicture}
+\end{center}
+
+Codage d'un graphe :
+
+\begin{itemize}
+	\item Matrice d'adjacence symétrique où a est la 1\iere colonne ou 1\iere ligne. Ici : \\
+	 \[M = \left(\begin{smallmatrix}
+	+\infty & 7 & 3 & +\infty & +\infty & +\infty \\ 
+	 & +\infty & +\infty & 3 & +\infty & -1 \\ 
+	 &  & +\infty & -2 & 0 & 4 \\ 
+	 &  &  & +\infty & -5 & +\infty \\ 
+	 & (sym) &  &  & +\infty & +\infty \\ 
+	 &  &  &  &  & +\infty
+	\end{smallmatrix} \right)\]
+	
+	\item Liste d'adjacence, où chaque ligne décrit les extrémités triées d'un élément avec leur poids. Ici :
+	\[\begin{smallmatrix}
+	 a & \longrightarrow & b,7 & \longrightarrow & c,3 &  & &  &  \\ 
+	 b & \longrightarrow & a,7 & \longrightarrow & d,3 & \longrightarrow & f,-1 &  &  \\ 
+	 c & \longrightarrow & a,3 & \longrightarrow & d,-2 & \longrightarrow & e,0 & \longrightarrow & f,4 \\ 
+	 d & \longrightarrow & b,3 & \longrightarrow & c,-2 & \longrightarrow & e,-5 &  &  \\ 
+	 e & \longrightarrow & c,0 & \longrightarrow & d,-5 &  &  &  &  \\ 
+	 f & \longrightarrow & b,-1 & \longrightarrow & c,4 &  &  &  & 
+	 \end{smallmatrix}  \]
+	 
+\textbf{Algorithme de \textsc{Krusgal} :}
+
+\subsection*{Graphe Orientés}
+Un graphe orienté $G = (X,A)$ est un couple d'ensembles finis avec :
+\begin{itemize}
+\item $X = \left\{\text{sommets}\right\}$
+\item $A = \left\{\mathbf{arcs}\right\}$, les arcs étant de la forme $(x,y)$ (le sens compte).
+\item $m = \Omega(X)$ (cardinal)
+\item $n = \Omega(Y)$
+\item Pour un arc $(x,y)$ :
+	\begin{itemize}
+	\item $x$ est prédécesseur de $y$
+	\item $y$ est successeur de $x$
+	\item $V^+(x) =$ voisinage extérieur de $x$
+	\item $V^-(x) =$ voisinage intérieur de $x$
+	\end{itemize}
+\end{itemize}
+\medskip
+Exemple :
+\begin{center}
+\begin{tikzpicture}[scale = 1.5]
+
+\tikzset{vertex/.style = {shape=circle,inner sep=2pt, draw}}
+\tikzset{edge/.style = {->,> = latex'}}
+% vertices
+\node[vertex] (a) at  (0,2) {$A$};
+\node[vertex] (e) at  (-1,1) {$E$};
+\node[vertex] (b) at  (1,1) {$B$};
+\node[vertex] (d) at  (-1,0) {$D$};
+\node[vertex] (c) at  (1,0) {$C$};
+
+%edges
+\draw[edge] (a) to (e);
+\draw[edge] (b) to (c);
+\draw[edge] (c) to (d);
+
+\draw[edge] (a)  to[bend left = 15] node [right] {abc} (b);
+\draw[edge] (b) to[bend left = 15] (a);
+
+\draw[edge] (b) to[bend left = 15] (e);
+\draw[edge] (e) to[bend left = 15] (b);
+
+\end{tikzpicture}
+\end{center}
+
+\end{itemize}
+\end{multicols*}
+\end{document}
