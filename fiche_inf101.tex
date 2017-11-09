@@ -77,9 +77,8 @@ On accède à l'adresse via :\\ $ T\left[ i\right] = T\left[ 0\right] + i\times 
 
 \textbf{File :} De même, \enquote{First in, first out} (FIFO).
 
-\textbf{Arbres :} Un arbre $A$ est de la forme $A = (R, \underbrace{A_1, \ldots, A_k}_{\text{Arbres}})$. $R$ est la racine l'arbre $A$.
-
-\textbf{Terminologie :}Soit $N$ un nœud de $A$.
+\textbf{Arbres :} Un arbre $A$ est de la forme $A = (R, \underbrace{A_1, \ldots, A_k}_{\text{Arbres}})$. $R$ est la racine l'arbre $A$.\\
+Terminologie : Soit $N$ un nœud de $A$.
 \begin{itemize}
 \item Les fils de $N$ sont les racines des sous-arbres de $N$;
 \item Un nœud interne est un nœud admettant au moins 1 fils;
@@ -231,7 +230,7 @@ Exemple :
 \tikzset{edge/.style = {-}}
 % vertices
 
-\node[vertex] (a) at  (0.3,1.5) {$a$};
+\node[vertex] (a) at  (0,.5) {$a$};
 \node[vertex] (b) at  (-.5,0) {$b$};
 \node[vertex] (c) at  (.5,1) {$c$};
 \node[vertex] (d) at  (1,0) {$d$};
@@ -240,8 +239,8 @@ Exemple :
 
 
 %edges
-\draw[edge] (a) to node[below]{7} (b);
-\draw[edge] (a) to node[right]{3} (c);
+\draw[edge] (a) to node[above]{7} (b);
+\draw[edge] (a) to node[left]{3} (c);
 \draw[edge] (f) to node[above]{4}(c);
 \draw[edge] (e) to node[above]{0} (c);
 \draw[edge] (d) to node[right]{-5} (e);
@@ -264,7 +263,7 @@ Codage d'un graphe :
 	 &  &  &  &  & +\infty
 	\end{smallmatrix} \right)\]
 	
-	\item Liste d'adjacence, où chaque ligne décrit les extrémités triées d'un élément avec leur poids. Ici :
+	\item Liste d'adjacence, où chaque ligne décrit les extrémités triées d'un élément avec leurs poids. Ici :
 	\[\begin{smallmatrix}
 	 a & \longrightarrow & b,7 & \longrightarrow & c,3 &  & &  &  \\ 
 	 b & \longrightarrow & a,7 & \longrightarrow & d,3 & \longrightarrow & f,-1 &  &  \\ 
@@ -273,7 +272,7 @@ Codage d'un graphe :
 	 e & \longrightarrow & c,0 & \longrightarrow & d,-5 &  &  &  &  \\ 
 	 f & \longrightarrow & b,-1 & \longrightarrow & c,4 &  &  &  & 
 	 \end{smallmatrix}  \]
-	 
+\end{itemize}
 \textbf{Algorithme de \textsc{Krusgal} :}
 
 \subsection*{Graphe Orientés}
@@ -296,7 +295,7 @@ Exemple :
 \begin{center}
 \begin{tikzpicture}[scale = 1.5]
 
-\tikzset{vertex/.style = {shape=circle,inner sep=2pt, draw}}
+\tikzset{vertex/.style = {inner sep=2pt, draw = none}}
 \tikzset{edge/.style = {->,> = latex'}}
 % vertices
 \node[vertex] (a) at  (0,2) {$A$};
@@ -319,8 +318,79 @@ Exemple :
 \end{tikzpicture}
 \end{center}
 
-Ceci est un test.
+\section*{Flux et flots}
 
-\end{itemize}
+\subsection*{Théorème de Mayer}
+Soit $G = (X,A)$ un graphe orienté.\\
+\textbf{Problème 1 :} déterminer le nombre minimum d'\textit{arcs} à retirer $G$ pour laisser un graphe fortement connexe $=$ forte arc-connectivité.\\
+\textbf{Problème 2 :} de même mais en enlevant des \textit{sommets} $=$ forte sommet-connectivité.\\
+\textbf{Problème 3 \textit{\&} 4 :} mêmes problèmes avec $G$ non-orienté.
+
+On résout le \textbf{problème 1} à l'aide des flots.
+
+On définit $C_1$ et $C_2$ comme étant \emph{arcs-disjoints} s'il n'ont pas d'arêtes en commun.
+
+\underline{\smash{Sous-problème :}}Soit $a$ et $b$ 2 sommets de $G$. Déterminer le minimum $N(a,b)$ d'arcs à retirer afin de plus avoir de chemin de $a$ vers $b$.\\
+Posons $P(a,b)$ le nombre maximum de chemin arc-disjoint de $a$ vers $b$.
+
+\smallskip
+\textbf{Théorème :} En attribuant des capacités unitaires aux arcs de $G$, en considérant $a$ et $b$ resp. source et puit, et en considérant $f^*_{ab}$ le flot maximum de $a$ vers $b$, alors :
+\[ N(a,b) = P(a,b) = v(f^*_{ab}) \]
+
+Preuve par transitivité de l'inégalité :
+\[ N(a,b) \overset{(1)}{\geqslant} P(a,b) \overset{(2)}{\geqslant} v(f^*_{ab}) \overset{(3)}{\geqslant} N(a,b)\]
+
+On résout alors le \textbf{problème 2} en remplaçant les sommets de la sorte :
+\begin{center}
+\begin{tikzpicture}[scale = 1.5]
+
+\tikzset{vertex/.style = {inner sep=2pt, draw = none}}
+\tikzset{edge/.style = {->,> = latex'}}
+% vertices
+\node[vertex] (a) at  (-.7,0) {$a$};
+\node[vertex] (b) at  (0,0) {$b$};
+\node[vertex] (c) at  (0,0.7) {$c$};
+\node[vertex] (d) at  (0.7,0) {$d$};
+
+%edges
+\draw[edge] (a) to (b);
+\draw[edge] (b) to (d);
+
+\draw[edge] (c)  to[bend left = 15] (b);
+\draw[edge] (b) to[bend left = 15] (c);
+\end{tikzpicture}\\
+$\Downarrow$
+\end{center}
+\begin{center}
+\begin{tikzpicture}[scale = 1.5]
+
+\tikzset{vertex/.style = {inner sep=2pt, draw = none}}
+\tikzset{edge/.style = {->,> = latex'}}
+% vertices
+\node[vertex] (a-) at  (-1.75,0) {$a^-$};
+\node[vertex] (a+) at  (-1.05,0) {$a^+$};
+\node[vertex] (b-) at  (-.35,0) {$b^-$};
+\node[vertex] (b+) at  (.35,0) {$b^+$};
+\node[vertex] (c-) at  (-.35,0.7) {$c^-$};
+\node[vertex] (c+) at  (.35,0.7) {$c^+$};
+\node[vertex] (d-) at  (1.05,0) {$d^-$};
+\node[vertex] (d+) at  (1.75,0) {$d^+$};
+
+%edges
+\draw[edge] (a-) to (a+);
+\draw[edge] (b-) to (b+);
+\draw[edge] (c-) to (c+);
+\draw[edge] (d-) to (d+);
+\draw[edge] (a+) to (b-);
+\draw[edge] (b+) to (d-);
+\draw[edge] (b+) to (c-);
+\draw[edge] (c+) to (b-);
+\end{tikzpicture}
+\end{center}
+Puis on résout le problème 1 avec le graphe obtenu.
+
+Le \textbf{problème 3} est résolu en remplaçant $\{x,y\}$ par$(x,y)$ et $(y,x)$. Attention, après la recherche d'arcs-disjoints il faut ré-ajuster les arcs afin d'y transformer en graphe non-orienté.
+
+Le \textbf{problème 4} en résolu grâce au \textbf{problème 2} puis \textbf{1}.
 \end{multicols*}
 \end{document}
