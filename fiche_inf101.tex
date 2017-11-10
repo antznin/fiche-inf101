@@ -30,15 +30,15 @@
 \let\endchangemargin=\endlist 
 
 \titleformat{\section}
- {\sffamily\Large\bfseries\raggedleft}{\thesection}{1em}{}[{\titlerule[1pt]}]
+ {\sffamily\large\bfseries\raggedleft}{\thesection}{1em}{}[{\titlerule[1pt]}]
  
  
 \titleformat{\subsection}
- {\sffamily\large\bfseries\centering}{\thesection}{0em}{}[{\titlerule[0pt]}]
+ {\sffamily\normalsize\bfseries\centering}{\thesection}{0em}{}[{\titlerule[0pt]}]
 
 
 \title{\sffamily\textbf{Fiche de révision \\ INF101} \thanks{Cours suivi avec Olivier \bsc{Hudry} }}
-\author{Antonin \bsc{Godard}}
+\author{Antonin \bsc{Godard}\\Sylvain \bsc{Rager}}
 \date{}
 
 \begin{document}
@@ -142,7 +142,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
  \KwData{Données du tableau $T$ entre les indices $g$ et $d$}
   $cle \longleftarrow T\left[g\right]$ \;
   $i \longleftarrow g+1$ \;
-  $j \longleftarrow d1$ \;
+  $j \longleftarrow d$ \;
   \While{$j \geqslant i$}{
   	\While{$i \leqslant j$ et $T\left[i\right] \leqslant cle$}{$i \longleftarrow i+1$\;}
   	\While{$T\left[j\right] > cle$}{$j \longleftarrow j-1$\;}
@@ -305,20 +305,65 @@ Exemple :
 \node[vertex] (c) at  (1,0) {$C$};
 
 %edges
-\draw[edge] (a) to (e);
-\draw[edge] (b) to (c);
-\draw[edge] (c) to (d);
+\draw[edge] (a) to node [left] {5} (e);
+\draw[edge] (b) to node [right] {2} (c);
+\draw[edge] (c) to node [above] {-3} (d);
 
-\draw[edge] (a)  to[bend left = 15] node [right] {abc} (b);
-\draw[edge] (b) to[bend left = 15] (a);
+\draw[edge] (a)  to[bend left = 15] node [right] {1} (b);
+\draw[edge] (b) to[bend left = 15] node [left] {7} (a);
 
-\draw[edge] (b) to[bend left = 15] (e);
-\draw[edge] (e) to[bend left = 15] (b);
+\draw[edge] (b) to[bend left = 15] node [below] {6} (e);
+\draw[edge] (e) to[bend left = 15] node [above] {-4} (b);
 
 \end{tikzpicture}
 \end{center}
 
+On définit alors de manière analogue la matrice d'adjacence de $G$. La liste d'adjacence distingue la liste des successeurs et la liste des prédécesseurs. 
+
 \section*{Flux et flots}
+
+Soit $G=(x,a)$ un graphe orienté. On dote chaque arc $a$ d'une capacité $c(a)$:
+\[
+\begin{array}{cc|ccl}
+c & : & A & \to & \mathbb{R}^*_+  \\
+ & & a & \mapsto & c(a) \\
+\end{array}
+\]
+Soient $s$ et $p$ resp. sources et puits.
+
+Un flot $f$ est défini par : \begin{enumerate}
+\item $
+\begin{array}{cc|ccl} 
+f & : & A & \to & \mathbb{R}_+  \\
+ & & a & \mapsto & f(a)\\
+\end{array}
+$
+\item $\forall a \in A\quad 0 \leqslant f(a) \leqslant c(a) $
+\item $\forall x \in X\backslash\{s,p\}$\\ 
+ $\displaystyle\sum_{y\in V^-(x)}{f(x,y)} = \sum_{z\in V^+(x)}{f(x,z)}$
+\end{enumerate}
+
+On définit ainsi
+\[v(f) = \displaystyle\sum_{z\in V^+(s)}{f(s,z)} - \sum_{y\in V^+(x)}{f(y,z)} \]
+
+\subsection*{Problème de la coupe minimum}
+Soit $G$ orienté, $c\, :\, A\, \mapsto\, \mathbb{R}^*_+$, $s$ et $p$.
+
+Une coupe $(S,\overline{S})$ est une bipartition de $X$ avec :\begin{enumerate}
+\item $S \cap \overline{S} = \varnothing$
+\item $S \cup \overline{S} = X$
+\item $s\in S$ et $p\in \overline{S}$
+\end{enumerate}
+
+On définit $c(S,\overline{S}) = \sum_{(x,y)\in S\times\overline{S}}{c(x,y)}$.
+
+Soit $f$ un flot de $s$ à $p$. Soit $(S,\overline{S})$ une coupe dans $G$. Alors :
+\[ \displaystyle v(f) = \sum_{(x,y)\in S\times\overline{S}}{f(x,y)} - \sum_{(z,t)\in \overline{S}\times S}{f(z,t)} \]
+
+\textbf{Corollaire 1 :} $\forall\,\text{flot}\,f, \,\forall\,\text{coupe}\,(S,\overline{S})\\v(f) \leqslant c(S,\overline{S})$.
+
+\textbf{Corollaire 2 :} Soit $v_{\text{max}}$ la valeur maximale d'un flot et soit $c_{\text{min}}$ la capacité minimum d'une coupe. Alors $v_{\text{max}} \leqslant c_{\text{min}}$. De plus, s'il existe $f$ et $(S,\overline{S})$ avec $v(f) = c(S,\overline{S})$ alors $f$ est un flot maximum et $(S,\overline{S})$ une coupe de capacité maximum.
+
 
 \subsection*{Théorème de Mayer}
 Soit $G = (X,A)$ un graphe orienté.\\
@@ -392,8 +437,11 @@ $\Downarrow$
 \end{center}
 Puis on résout le problème 1 avec le graphe obtenu.
 
-Le \textbf{problème 3} est résolu en remplaçant $\{x,y\}$ par$(x,y)$ et $(y,x)$. Attention, après la recherche d'arcs-disjoints il faut ré-ajuster les arcs afin d'y transformer en graphe non-orienté.
+Le \textbf{problème 3} est résolu en remplaçant $\{x,y\}$ par $(x,y)$ et $(y,x)$. Attention, après la recherche d'arcs-disjoints il faut ré-ajuster les arcs afin d'y transformer en graphe non-orienté.
 
 Le \textbf{problème 4} en résolu grâce au \textbf{problème 2} puis \textbf{1}.
+
+
+
 \end{multicols*}
 \end{document}
