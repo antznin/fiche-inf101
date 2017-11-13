@@ -321,6 +321,7 @@ Exemple :
 On définit alors de manière analogue la matrice d'adjacence de $G$. La liste d'adjacence distingue la liste des successeurs et la liste des prédécesseurs. 
 
 \section*{Flux et flots}
+\newcommand{\Sb}{\overline{S}}
 
 Soit $G=(x,a)$ un graphe orienté. On dote chaque arc $a$ d'une capacité $c(a)$:
 \[
@@ -349,21 +350,49 @@ On définit ainsi
 \subsection*{Problème de la coupe minimum}
 Soit $G$ orienté, $c\, :\, A\, \mapsto\, \mathbb{R}^*_+$, $s$ et $p$.
 
-Une coupe $(S,\overline{S})$ est une bipartition de $X$ avec :\begin{enumerate}
-\item $S \cap \overline{S} = \varnothing$
-\item $S \cup \overline{S} = X$
-\item $s\in S$ et $p\in \overline{S}$
+Une coupe $(S,\Sb)$ est une bipartition de $X$ avec :\begin{enumerate}
+\item $S \cap \Sb = \varnothing$
+\item $S \cup \Sb = X$
+\item $s\in S$ et $p\in \Sb$
 \end{enumerate}
 
-On définit $c(S,\overline{S}) = \sum_{(x,y)\in S\times\overline{S}}{c(x,y)}$.
+On définit $c(S,\Sb) = \sum_{(x,y)\in S\times\Sb}{c(x,y)}$.
 
-Soit $f$ un flot de $s$ à $p$. Soit $(S,\overline{S})$ une coupe dans $G$. Alors :
-\[ \displaystyle v(f) = \sum_{(x,y)\in S\times\overline{S}}{f(x,y)} - \sum_{(z,t)\in \overline{S}\times S}{f(z,t)} \]
+Soit $f$ un flot de $s$ à $p$. Soit $(S,\Sb)$ une coupe dans $G$. Alors :
+\[ \displaystyle v(f) = \sum_{(x,y)\in S\times\Sb}{f(x,y)} - \sum_{(z,t)\in \Sb\times S}{f(z,t)} \]
 
-\textbf{Corollaire 1 :} $\forall\,\text{flot}\,f, \,\forall\,\text{coupe}\,(S,\overline{S})\\v(f) \leqslant c(S,\overline{S})$.
+\textbf{Corollaire 1 :} $\forall\,\text{flot}\,f, \,\forall\,\text{coupe}\,(S,\Sb)\\v(f) \leqslant c(S,\Sb)$.
 
-\textbf{Corollaire 2 :} Soit $v_{\text{max}}$ la valeur maximale d'un flot et soit $c_{\text{min}}$ la capacité minimum d'une coupe. Alors $v_{\text{max}} \leqslant c_{\text{min}}$. De plus, s'il existe $f$ et $(S,\overline{S})$ avec $v(f) = c(S,\overline{S})$ alors $f$ est un flot maximum et $(S,\overline{S})$ une coupe de capacité maximum.
+\textbf{Corollaire 2 :} Soit $v_{\text{max}}$ la valeur maximale d'un flot et soit $c_{\text{min}}$ la capacité minimum d'une coupe. Alors $v_{\text{max}} \leqslant c_{\text{min}}$. De plus, s'il existe $f$ et $(S,\Sb)$ avec $v(f) = c(S,\Sb)$ alors $f$ est un flot maximum et $(S,\Sb)$ une coupe de capacité maximum.
 
+\underline{\smash{Algorithme de \textsc{Ford} \& \textsc{Fulkerson} :}}
+
+\begin{algorithm}[H]
+ $s$ est marqué par $(\Delta,+\infty)$ \;
+ Les autres sommets sont non marqués \;
+ Aucun sommet n'est examiné \;
+ \While{$p$ non marqué \emph{et} $\exists$ un sommet marqué non-examiné}
+ {
+ 	 Soit $x$ un tel sommet et $\alpha$ la val. absolue de la seconde composante de la marque de $x$ \;
+ 	 \For{$y\in V^+(x)$ non-marqué}
+ 	 {
+ 	 	\If{$f(x,y) < c(x,y)$}
+ 	 	{
+ 	 		marquer $y$ par \footnotesize{$\left(x,\min\left[\alpha,c(x,y)-f(x,y)\right]\right)$} \;
+ 	 	}
+ 	 }
+ 	 \For{$z\in V^-(x)$ non-marqué}
+ 	 {
+ 	 	\If{$f(x,y) > 0$}
+ 	 	{
+ 	 		marquer $z$ par \footnotesize{$\left(x,-\min\left[\alpha,f(z,x)\right]\right)$} \;
+ 	 	}
+ 	 }
+ 	 $x$ est examiné \;
+ }
+ 
+ \caption{Algorithme de marquage}
+\end{algorithm}
 
 \subsection*{Théorème de Mayer}
 Soit $G = (X,A)$ un graphe orienté.\\
@@ -375,7 +404,7 @@ On résout le \textbf{problème 1} à l'aide des flots.
 
 On définit $C_1$ et $C_2$ comme étant \emph{arcs-disjoints} s'il n'ont pas d'arêtes en commun.
 
-\underline{\smash{Sous-problème :}}Soit $a$ et $b$ 2 sommets de $G$. Déterminer le minimum $N(a,b)$ d'arcs à retirer afin de plus avoir de chemin de $a$ vers $b$.\\
+\underline{\smash{Sous-problème :}} Soit $a$ et $b$ 2 sommets de $G$. Déterminer le minimum $N(a,b)$ d'arcs à retirer afin de plus avoir de chemin de $a$ vers $b$.\\
 Posons $P(a,b)$ le nombre maximum de chemin arc-disjoint de $a$ vers $b$.
 
 \smallskip
