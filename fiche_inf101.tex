@@ -365,7 +365,33 @@ Soit $f$ un flot de $s$ à $p$. Soit $(S,\Sb)$ une coupe dans $G$. Alors :
 
 \textbf{Corollaire 2 :} Soit $v_{\text{max}}$ la valeur maximale d'un flot et soit $c_{\text{min}}$ la capacité minimum d'une coupe. Alors $v_{\text{max}} \leqslant c_{\text{min}}$. De plus, s'il existe $f$ et $(S,\Sb)$ avec $v(f) = c(S,\Sb)$ alors $f$ est un flot maximum et $(S,\Sb)$ une coupe de capacité maximum.
 
-\underline{\smash{Algorithme de \textsc{Ford} \& \textsc{Fulkerson} :}}
+Une \textit{chaîne augmentante} (cf. algorithme de marquage suivant) pour $f$ est une suite de sommets de la forme $x_1x_2\ldots x_k$ avec :
+\begin{enumerate}
+\item $\forall\, 1 \leqslant i \leqslant k\quad x_i \in X$
+\item $\forall\, 1 \leqslant i \leqslant k-1$
+	\begin{itemize}
+	\item $(x_i,x_{i+1})\in A$ avec $f(x_i,x_{i+1}) < c(x_i,x_{i+1})$
+	\item $(x_{i+1},x_i)\in A$ avec $f (x_{i+1},x_i) > 0$
+	\end{itemize}
+\end{enumerate}
+
+On les représente de la sorte :
+\begin{center}
+\begin{tikzpicture}[scale = 1.5]
+
+\tikzset{vertex/.style = {inner sep=2pt, draw = none}}
+\tikzset{edge/.style = {->,> = latex'}}
+% vertices
+\node[vertex] (a) at  (-1,0) {$s$};
+\node[vertex] (e) at  (0,0) {$b$};
+\node[vertex] (b) at  (1,0) {$p$};
+
+%edges
+\draw[edge] (a) to node [above] {+$\varepsilon$} (e);
+\draw[edge] (b) to node [above] {-$\varepsilon$} (e);
+
+\end{tikzpicture}
+\end{center}
 
 \begin{algorithm}[H]
  $s$ est marqué par $(\Delta,+\infty)$ \;
@@ -391,7 +417,7 @@ Soit $f$ un flot de $s$ à $p$. Soit $(S,\Sb)$ une coupe dans $G$. Alors :
  	 $x$ est examiné \;
  }
  
- \caption{Algorithme de marquage}
+ \caption{Algorithme de \textsc{Ford} et \textsc{Fulkerson}}
 \end{algorithm}
 
 \subsection*{Théorème de Mayer}
