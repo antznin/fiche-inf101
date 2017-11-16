@@ -22,6 +22,7 @@
  \usepackage{etoolbox} % For spaces in paths
 \usepackage[vlined, boxruled]{algorithm2e}
 \usepackage{pgf,tikz}
+\usepackage{pgfplots}
 \usetikzlibrary{arrows}
 \tikzset{
   font={\fontsize{7pt}{12}\selectfont}}
@@ -346,6 +347,8 @@ On définit deux attributs :
 
 Une \textbf{numération topologique} de $G$ orienté est une bijection $\varphi\,:\,X\rightarrow\,\{1,2,\ldots,n\}$ tq. $\forall (x,y)\in A, \,\varphi(x) < \varphi(y)$.
 
+%inclure exemple
+
 \begin{algorithm}[H]
  Déterminer une numérotation topologique $\varphi$ et $\varphi^{-1}$ \;
  Pour $x\neq r$, $\pi(x) \longleftarrow \underset{\tred{-\infty}}{+\infty}$\;
@@ -384,7 +387,78 @@ Modélisation : soit \GXA orienté, pondéré, défini par :
 	\item $(x,\fin)$ pondéré par $d_x$
 \end{itemize}
 
+Exemple :
+\begin{center}
+\begin{tabular}{ccc}
+ & Durée & Contraintes \\ 
+\hline \hline
+A & 2 & B,D avant A \\ 
+\hline 
+B & 7 & / \\ 
+\hline 
+C & 5 & B,D,E avant C \\ 
+\hline 
+D & 3 & / \\ 
+\hline 
+E & 6 & A avant E \\ 
+\end{tabular} 
+\end{center}
 
+\newcommand{\ovun}[3]{\overset{{\color{blue}#2}}{\underset{{\color{red}#3}}{#1}}}
+
+$\forall\mathcal{C}$ chemin de début à fin , $\Dmin \geqslant p(\mathcal{C})$.
+
+$G$ est sans-circuit ssi le problème d'ordonnancement admet une solution. Dans ce cas, considérons un plch. de début à $x \neq$ début : le poids de ce chemin donne la date au plus tôt de début de réalisation de $x$. D'où :
+\[ \Dmin = \text{poids d'un plch. de début à fin}\]
+
+$\Rightarrow$ Algorithme de \textsc{Bellman} :
+
+\begin{center}
+\begin{tikzpicture}[scale = 1.5]
+
+\tikzset{vertex/.style = {inner sep=2pt, draw = none}}
+\tikzset{edge/.style = {->,> = latex'}}
+% vertices
+\node[vertex] (a) at  (0.7,1.4) {$\ovun{A}{7,B}{4}$};
+\node[vertex] (b) at  (-0.7,1.4) {$\ovun{B}{0,\text{début}}{3}$};
+\node[vertex] (c) at  (0.7,0) {$\ovun{C}{15,E}{6}$};
+\node[vertex] (d) at  (-0.7,0) {$\ovun{D}{0,\text{début}}{2}$};
+\node[vertex] (e) at  (0.7,0.7) {$\ovun{E}{9,A}{5}$};
+\node[vertex] (deb) at  (-1.4,.7) {$\ovun{\text{début}}{0,\cdot}{1}$};
+\node[vertex] (fin) at  (1.4,0.7) {$\ovun{\text{fin}}{20,C}{7}$};
+
+%edges
+\draw[edge] (deb) to node [above] {0} (b);
+\draw[edge] (deb) to node [above] {0} (d);
+\draw[edge] (b) to node [above] {7} (a);
+\draw[edge] (b) to[bend left = 15] node [above] {7} (c);
+\draw[edge] (d) to[bend right = 15] node [left] {3} (a);
+\draw[edge] (d) to node [above] {3} (c);
+\draw[edge] (a) to node [right] {2} (e);
+\draw[edge] (e) to node [right] {6} (c);
+\draw[edge] (c) to node [below] {5} (fin);
+
+\end{tikzpicture}
+\end{center}
+
+\begin{flushright}
+{\footnotesize \tred{Numérotation topologique} \\
+{\color{blue} Marquage de \textsc{Bellman}}}
+\end{flushright}
+
+\begin{tikzpicture}[scale = 1]
+\begin{axis}
+[title = Diagramme de \textsc{Gantt}, height = 3cm, xlabel = temps, ylabel = ressources, width = 0.3\paperwidth, axis x line = bottom, axis y line =left, ymin = 0, ymax = 2.2, xmin = 0, xmax = 21]
+\addplot+[blue, ybar interval, mark = none] coordinates {(0,1) (7,1) (9,1) (15,1) (20,1) }; 
+\addplot+[blue, ybar interval, mark = none] plot coordinates {(0,2) (3,2)};
+\addplot+[white, mark = none] plot coordinates {(3,0.001) (3,0.99)};
+\node at (axis cs:3.5,0.5) [] {$B$};
+\node at (axis cs:8,0.5) [] {$A$};
+\node at (axis cs:12,0.5) [] {$E$};
+\node at (axis cs:17.5,0.5) [] {$C$};
+\node at (axis cs:1.5,1.5) [] {$D$};
+\end{axis} 
+\end{tikzpicture}
 
 \section*{Flux et flots}
 \newcommand{\Sb}{\overline{S}}
