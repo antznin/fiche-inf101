@@ -13,6 +13,7 @@
 \usepackage{amssymb}
 \usepackage[babel=true]{csquotes}
 \usepackage{titlesec}
+\usepackage{color}
  \usepackage[usenames,dvipsnames,pdf]{pstricks}
  \usepackage{epsfig}
  \usepackage{pst-grad} % For gradients
@@ -186,8 +187,10 @@ child {node {right}
 
 \section*{Théorie des graphes}
 
+\newcommand{\GXA}{$G = (X,A)$ }
+
 \subsection*{Graphes Non-Orientés}
-Un graphe non-orienté $G = (X,A)$ est un couple d'ensembles finis avec :
+Un graphe non-orienté \GXA est un couple d'ensembles finis avec :
 \begin{itemize}
 \item $X = \left\{\text{sommets}\right\}$
 \item $A = \left\{\mathbf{ar\hat{e}tes}\right\}$, les arêtes étant de la forme $\{x,y\}$ (le sens compte).
@@ -276,7 +279,7 @@ Codage d'un graphe :
 \textbf{Algorithme de \textsc{Krusgal} :}
 
 \subsection*{Graphe Orientés}
-Un graphe orienté $G = (X,A)$ est un couple d'ensembles finis avec :
+Un graphe orienté \GXA est un couple d'ensembles finis avec :
 \begin{itemize}
 \item $X = \left\{\text{sommets}\right\}$
 \item $A = \left\{\mathbf{arcs}\right\}$, les arcs étant de la forme $(x,y)$ (le sens compte).
@@ -320,10 +323,73 @@ Exemple :
 
 On définit alors de manière analogue la matrice d'adjacence de $G$. La liste d'adjacence distingue la liste des successeurs et la liste des prédécesseurs. 
 
+\section*{Plus courts chemins}
+
+\subsection*{Cas des graphes sans circuits : algorithme de Bellman}
+
+\newcommand{\pere}{\text{père}}
+\newcommand{\Vm}{V^-}
+\newcommand{\Vp}{V^+}
+\newcommand{\tred}[1]{{\color{red}#1}}
+
+Soit \GXA orienté pondéré par $p\,:\,A\,\rightarrow\,\mathbb{R}$ \emph{sans-circuits}, et un sommet $r\in X$.
+
+\textbf{Problème :} déterminer, pour $x\neq r$, un $\underset{\tred{plch.}}{pcch.}$ de $r$ à $x$.
+
+On définit deux attributs :
+\begin{itemize}
+\item $\pi(x) =$ poids d'un pcch. de $r$ à $x$
+\item $\pere(x) =$ prédécesseur de $x$ sur un tel chemin
+\end{itemize}
+
+\[ \pi(x) = \displaystyle \min_{y\in \Vm(x)}\left[\pi(y) + p(y,x)\right] \]
+
+Une \textbf{numération topologique} de $G$ orienté est une bijection $\varphi\,:\,X\rightarrow\,\{1,2,\ldots,n\}$ tq. $\forall (x,y)\in A, \,\varphi(x) < \varphi(y)$.
+
+\begin{algorithm}[H]
+ Déterminer une numérotation topologique $\varphi$ et $\varphi^{-1}$ \;
+ Pour $x\neq r$, $\pi(x) \longleftarrow \underset{\tred{-\infty}}{+\infty}$\;
+ $\pi(r) \longleftarrow 0$ \;
+ 
+ \For{$i$ variant de 2 à $n$}
+ {
+ 	$x \longleftarrow \varphi^{-1}(i)$ \;
+ 	$\pi(x) \longleftarrow \min_{y\in \Vm(x)}\left[\pi(y) + p(y,x)\right]$ \;
+ 	{\footnotesize \tred{$\pi(x) \leftarrow\max_{y\in \Vm(x)}\left[\pi(y) + p(y,x)\right]$\;} }
+ 	$\pere(x) \longleftarrow y^*\in \Vm(x)$ avec $\pi(x) = \pi(y^*) + p(y^*,x)$ \;
+ }
+ 
+ \caption{Algorithme de \textsc{Bellman}}
+\end{algorithm}
+
+ \subsection*{Problème de l'ordonnancement}
+ 
+\newcommand{\Dmin}{D_{\text{min}}} 
+\newcommand{\debut}{\text{début}}
+\newcommand{\fin}{\text{fin}}
+ 
+ Soit $T$ un ensemble de $p$ tâches $t_i$ ($1\leqslant i\leqslant p$). Chaque tâche $t_i$ possède une durée $d_i$. On doit respecter des contraintes de la forme : avant de commencer $x$, on doit avoir fini $y$. On peut réaliser les tâches en parallèle.
+ 
+De quelle façon réaliser chaque tâche de façon à :
+\begin{itemize}
+	\item respecter les contraintes
+	\item minimiser la durée totale de réalisation, $\Dmin$.
+\end{itemize}
+
+Modélisation : soit \GXA orienté, pondéré, défini par :
+\begin{itemize}
+	\item $X = T \cup \{\debut,\fin\}$
+	\item $(x,y)\in A \Longleftrightarrow$ $x$ doit être réalisée avant $y$ et on pondère $(x,y)$ par $d_x$
+	\item $(\debut,x)$ pondéré par 0
+	\item $(x,\fin)$ pondéré par $d_x$
+\end{itemize}
+
+
+
 \section*{Flux et flots}
 \newcommand{\Sb}{\overline{S}}
 
-Soit $G=(x,a)$ un graphe orienté. On dote chaque arc $a$ d'une capacité $c(a)$:
+Soit \GXA un graphe orienté. On dote chaque arc $a$ d'une capacité $c(a)$:
 \[
 \begin{array}{cc|ccl}
 c & : & A & \to & \mathbb{R}^*_+  \\
@@ -348,7 +414,7 @@ On définit ainsi
 \[v(f) = \displaystyle\sum_{z\in V^+(s)}{f(s,z)} - \sum_{y\in V^+(x)}{f(y,z)} \]
 
 \subsection*{Problème de la coupe minimum}
-Soit $G$ orienté, $c\, :\, A\, \mapsto\, \mathbb{R}^*_+$, $s$ et $p$.
+Soit $G$ orienté, $c\, :\, A\, \rightarrow\, \mathbb{R}^*_+$, $s$ et $p$.
 
 Une coupe $(S,\Sb)$ est une bipartition de $X$ avec :\begin{enumerate}
 \item $S \cap \Sb = \varnothing$
@@ -421,7 +487,7 @@ On les représente de la sorte :
 \end{algorithm}
 
 \subsection*{Théorème de Mayer}
-Soit $G = (X,A)$ un graphe orienté.\\
+Soit \GXA un graphe orienté.\\
 \textbf{Problème 1 :} déterminer le nombre minimum d'\textit{arcs} à retirer $G$ pour laisser un graphe fortement connexe $=$ forte arc-connectivité.\\
 \textbf{Problème 2 :} de même mais en enlevant des \textit{sommets} $=$ forte sommet-connectivité.\\
 \textbf{Problème 3 \textit{\&} 4 :} mêmes problèmes avec $G$ non-orienté.
