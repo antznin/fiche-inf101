@@ -619,6 +619,61 @@ $\Rightarrow$ Algorithme de \textsc{Bellman} :
 \end{axis} 
 \end{tikzpicture}
 
+\section*{Parcours de graphes}
+
+\subsection*{Parcours en largeur}
+
+Soit \GXA et $r\in X$.
+
+\begin{algorithm}[H]
+Aucun sommet n'est examiné\;
+Aucun sommet n'est marqué\;
+Marquer $r$\;
+Aucun arc n'est traversé\;
+\While{$\exists$ un sommet $x$ marqué et un arc $(x,y)$ non traversé}
+{
+	\If{$x$ non examiné}{Examiner $x$}\;
+	traverser $(x,y)$\;
+	\If{$y$ non marqué}
+	{
+		marquer $y$\;
+		père$(y) \longleftarrow x$\;
+	}
+}
+\caption{\enquote{Moule} d'un parcours de graphe orientés en largeur}
+\end{algorithm}
+
+Gestion des objets \emph{marqués} selon une file :
+\begin{itemize}
+\item On ajoute les nouveaux sommets marqués à la fin de la file
+\item On retire le sommet du début de la file une fois qu'il est examiné
+\end{itemize}
+
+\subsection*{Parcours en profondeur DFS}
+
+Soit \GXA et $r\in X$.
+\begin{flushright}
+{\footnotesize
+{\color{blue} cas préfixe} \\
+{\color{red} cas postfixe}
+}
+\end{flushright}
+\begin{algorithm}[H]
+marquer $x$\;
+{\color{blue} attribuer à $x$ le numéro préfixe courant}\;
+\For{$(x,y)\in A$}
+{
+	traverser $(x,y)$\;
+	\If{$y$ non marqué}
+	{
+		père($y$) $\longleftarrow x$\;
+		appliquer DFS à $x$\;
+	}
+}
+{\color{red} attribuer à $x$ le numéro postfixe courant}\;
+\caption{DFS($x$)}
+\end{algorithm}
+
 \section*{Flux et flots}
 \newcommand{\Sb}{\overline{S}}
 
