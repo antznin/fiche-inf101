@@ -14,6 +14,7 @@
 \usepackage[babel=true]{csquotes}
 \usepackage{titlesec}
 \usepackage{color}
+\usepackage{fancybox}
  \usepackage[usenames,dvipsnames,pdf]{pstricks}
  \usepackage{epsfig}
  \usepackage{pst-grad} % For gradients
@@ -259,14 +260,47 @@ On définit alors le tri tas :
  \caption{Tri tas}
 \end{algorithm}
 
+\section*{Fonctions de hachage}
+
+Pour gérer une collision en hachage, on peut faire appel à un  \enquote{hachage linéaire}. Si, lors de la construction de la table, on veut ranger un mot mais que la place est déjà occupée, alors on se déplace cycliquement vers la droite (càd qu'on repart du début du tableau à chaque fois), puis on range le mot dans une case libre.
+
+\section*{Codage de \bsc{Huffman}}
+
+\textbf{Problème :} on souhaite envoyer un texte en l'envoyant en binaire afin d'optimiser la longueur du texte codé.
+
+\newcommand{\occ}{\text{occ}}
+\newcommand{\lng}{\text{l}}
+On définit :
+\begin{itemize}
+\item $\occ(x) =$ nombre d'occurence de $x$
+\item $\lng(x) =$ longueur de $x$
+\end{itemize}
+
+Le codage respecte la \textbf{règle du préfixe} : toute codage de caractère ne peut être le préfixe du codage d'un autre caractère. On associe un arbre binaire à ce codage dont les feuilles correspondent au caractère et chaque branche gauche représente un 0 et chaque branche droite représente un 1.
+
+Long. du texte :
+$L = \sum_{x}{\occ(x)\times p(x)}$
+
+\textbf{Propositions :}
+\begin{enumerate}
+\item tout arbre optimal est \emph{complet}
+\item $\exists$ un arbre optimal dans lequel les 2 caractères les moins fréquents ($\alpha$ \& $\beta$) sont associés aux feuilles de profondeur maximum
+\item Idem, avec $\alpha$ et $\beta$ de même père, donc frères
+\end{enumerate}
+
+%\begin{center}
 %\begin{tikzpicture}
+%\tikzset{
+%  node/.style = {circle,
+%                     draw}
+%}
 %\node {root}
 %[level distance=7mm,
 %level 1/.style={sibling distance=20mm},
 %level 2/.style={sibling distance=10mm},
 %level 3/.style={sibling distance=5mm}]
 %child {node {left}
-%	child { node {child}}
+%	child {node {child}}
 %	child {node {child}}
 %	}
 %child {node {right}
@@ -274,10 +308,7 @@ On définit alors le tri tas :
 %	child {node {child}}
 %};
 %\end{tikzpicture}
-
-\section*{Codage de \bsc{Huffman}}
-
-
+%\end{center}
 
 \section*{Théorie des graphes}
 
