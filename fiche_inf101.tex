@@ -14,6 +14,7 @@
 \usepackage[babel=true]{csquotes}
 \usepackage{titlesec}
 \usepackage{color}
+\usepackage{fancybox}
  \usepackage[usenames,dvipsnames,pdf]{pstricks}
  \usepackage{epsfig}
  \usepackage{pst-grad} % For gradients
@@ -104,7 +105,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
 
 \section*{Tri}
 
-\newcommand{\GO}{\mathcal{O}}
+\newcommand{\GO}{\text{O}}
 
 \textbf{Problème :} On dispose d'une collection de $n$ éléments, on souhaite les ordonner sous forme croissante.
 
@@ -120,7 +121,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
   }
   $T\left[j\right] \longleftarrow cle$ \;
  }
- \caption{Tri Insertion}
+ \caption{Tri Insertion $\GO(n^2)$}
 \end{algorithm}
 
 \textbf{Tri sélection :} On cherche le plus petit élément, on le met à la 1\iere position; on cherche le 2\ieme plus petit, et etc$\hdots$
@@ -138,7 +139,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
   	échanger($T$, $i$, $indicePetit$) \;
   }
  }
- \caption{Tri Sélection}
+ \caption{Tri Sélection $\GO(n^2)$}
 \end{algorithm}
 
 \textbf{Tri rapide :} On utilise une fonction nommée $partition$ sur une liste qui sélectionne une donnée $cle$, et qui range les données plus petites que $cle$ à gauche de $cle$, puis range à droite de $cle$ les éléments plus grand que $cle$. Il est défini récursivement la plupart du temps.
@@ -167,11 +168,11 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
  	tri\_rapide($g$,$j-1$)\;
  	tri\_rapide($j+1$,$d$)\;
  }
- \caption{tri\_rapide($g$,$d$)}
+ \caption{tri\_rapide($g$,$d$) $\GO(n\log n)$}
 \end{algorithm}
 \medskip
 
-\textbf{Tri par arbre binaire de recherche (ABR) $\mathcal{O}(n^2)$:} arbre binaire vérifiant :
+\textbf{Tri par arbre binaire de recherche (ABR) :} arbre binaire vérifiant :
 \begin{changemargin}{0.5cm}{0.5cm} 
 \begin{center}
 $\forall N\in A$, la clé de $N$ est $\geqslant$ aux clés du sous-arbre gauche de $N$ et $\leqslant$ aux clés du sous-arbre droit de $N$.
@@ -184,10 +185,10 @@ Le tri ABR se décompose en deux étapes :
 \item Parcours de l'ABR
 \end{enumerate}
 
-Un parcours infixe trie les clés de l'ABR.
+Un parcours infixe trie les clés de l'ABR, le tout en $\GO(n^2)$.
 
 \medskip
-\textbf{Tri tas $\mathcal{O}(n\log(n))$ :} on définit un tas comme un arbre dont les clés vérifient :
+\textbf{Tri tas :} on définit un tas comme un arbre dont les clés vérifient :
 \begin{changemargin}{0.5cm}{0.5cm} 
 \begin{center}
 $\forall N\in A$, la clé de $N$ est $\geqslant$ à la clé des fils de $N$.
@@ -243,8 +244,6 @@ Principe du tri : on échange la racine avec la dernière feuille du tas. L'ex-r
  \caption{descente$(q,p)$}
 \end{algorithm}
 
-On définit alors le tri tas :
-
 \begin{algorithm}[H]
  \KwData{$p$ est un entier}
   \For{$2\leqslant p\leqslant n$, $p\leftarrow p+1$}
@@ -256,17 +255,50 @@ On définit alors le tri tas :
   	échanger$(T,1,p)$ \;
   	descente$(1,p-1)$ \;
   }
- \caption{Tri tas}
+ \caption{Tri tas $\GO(n\log(n))$}
 \end{algorithm}
 
+\section*{Fonctions de hachage}
+
+Pour gérer une collision en hachage, on peut faire appel à un  \enquote{hachage linéaire}. Si, lors de la construction de la table, on veut ranger un mot mais que la place est déjà occupée, alors on se déplace cycliquement vers la droite (càd qu'on repart du début du tableau à chaque fois), puis on range le mot dans une case libre.
+
+\section*{Codage de \bsc{Huffman}}
+
+\textbf{Problème :} on souhaite envoyer un texte en l'envoyant en binaire afin d'optimiser la longueur du texte codé.
+
+\newcommand{\occ}{\text{occ}}
+\newcommand{\lng}{\text{l}}
+On définit :
+\begin{itemize}
+\item $\occ(x) =$ nombre d'occurence de $x$
+\item $\lng(x) =$ longueur de $x$
+\end{itemize}
+
+Le codage respecte la \textbf{règle du préfixe} : toute codage de caractère ne peut être le préfixe du codage d'un autre caractère. On associe un arbre binaire à ce codage dont les feuilles correspondent au caractère et chaque branche gauche représente un 0 et chaque branche droite représente un 1.
+
+Long. du texte :
+$L = \sum_{x}{\occ(x)\times p(x)}$
+
+\textbf{Propositions :}
+\begin{enumerate}
+\item tout arbre optimal est \emph{complet}
+\item $\exists$ un arbre optimal dans lequel les 2 caractères les moins fréquents ($\alpha$ \& $\beta$) sont associés aux feuilles de profondeur maximum
+\item Idem, avec $\alpha$ et $\beta$ de même père, donc frères
+\end{enumerate}
+
+%\begin{center}
 %\begin{tikzpicture}
+%\tikzset{
+%  node/.style = {circle,
+%                     draw}
+%}
 %\node {root}
 %[level distance=7mm,
 %level 1/.style={sibling distance=20mm},
 %level 2/.style={sibling distance=10mm},
 %level 3/.style={sibling distance=5mm}]
 %child {node {left}
-%	child { node {child}}
+%	child {node {child}}
 %	child {node {child}}
 %	}
 %child {node {right}
@@ -274,10 +306,7 @@ On définit alors le tri tas :
 %	child {node {child}}
 %};
 %\end{tikzpicture}
-
-\section*{Codage de \bsc{Huffman}}
-
-
+%\end{center}
 
 \section*{Théorie des graphes}
 
@@ -370,7 +399,6 @@ Codage d'un graphe :
 	 f & \longrightarrow & b,-1 & \longrightarrow & c,4 &  &  &  & 
 	 \end{smallmatrix}  \]
 \end{itemize}
-\textbf{Algorithme de \textsc{Krusgal} :}
 
 \subsection*{Graphe Orientés}
 Un graphe orienté \GXA est un couple d'ensembles finis avec :
@@ -416,6 +444,44 @@ Exemple :
 \end{center}
 
 On définit alors de manière analogue la matrice d'adjacence de $G$. La liste d'adjacence distingue la liste des successeurs et la liste des prédécesseurs. 
+
+\subsection*{Arbre couvant de poids minimum}
+
+Étant donné un graphe $G$ non-orienté et pondéré, on cherche un arbre couvant de poids minimum sur ce graphe. 
+
+On utilise l'algorithme de \textsc{Krusgal} qui consiste, pour un graphe \emph{connexe} de $n$ sommets, à sélectionner à chaque itération une nouvelle arête du graphe qui ne crée pas de cycle. Il se déroule en deux étapes :
+\begin{enumerate}
+\item trier les arêtes par ordre croissant
+\item tant que l'on a pas retenu $n-1$ arêtes, on procède de la sorte : considérer, dans l'ordre du tri, la première arête non examinée, puis appliquer la condition du paragraphe ci-dessus
+\end{enumerate}
+
+\newcommand{\CC}{\text{CC}}
+\begin{algorithm}[H]
+\KwData{$T$ l'arbre couvant de poids minimum}
+ Trier les arêtes $\longrightarrow L$ \;
+ \For{$i$ de 1 à $n$}{
+ 	$\CC(i) \longleftarrow i$ \;
+ }
+ $ComptL \longleftarrow 1$ \;
+ $ComptT \longleftarrow 0$ \;
+ \While{$CompteurT < n-1$}{
+ 	Soit $\{x,y\}$ l'arête $L\left[ComptL\right]$\;
+ 	$ComptL \longleftarrow ComptL + 1$\;
+ 	\If{$\CC(x) \neq \CC(y)$}{
+ 		$ComptT \longleftarrow ComptT +1$\;
+ 		$T(ComptT) \longleftarrow \{x,y\}$\;
+ 		$aux \longleftarrow \CC(y)$\;
+ 		\For{$i$ de 1 à $n$}{
+ 			\If{$\CC(i) = aux$}
+ 			{
+ 				$\CC(i) \leftarrow \CC(x)$\;
+ 			}
+ 		}
+ 	}
+ }
+ 
+ \caption{Algo. de Krusgal $\GO(n^2+m\log m)$}
+\end{algorithm}
 
 \section*{Plus courts chemins}
 
@@ -552,6 +618,61 @@ $\Rightarrow$ Algorithme de \textsc{Bellman} :
 \node at (axis cs:1.5,1.5) [] {$D$};
 \end{axis} 
 \end{tikzpicture}
+
+\section*{Parcours de graphes}
+
+\subsection*{Parcours en largeur}
+
+Soit \GXA et $r\in X$.
+
+\begin{algorithm}[H]
+Aucun sommet n'est examiné\;
+Aucun sommet n'est marqué\;
+Marquer $r$\;
+Aucun arc n'est traversé\;
+\While{$\exists$ un sommet $x$ marqué et un arc $(x,y)$ non traversé}
+{
+	\If{$x$ non examiné}{Examiner $x$}\;
+	traverser $(x,y)$\;
+	\If{$y$ non marqué}
+	{
+		marquer $y$\;
+		père$(y) \longleftarrow x$\;
+	}
+}
+\caption{\enquote{Moule} d'un parcours de graphe orientés en largeur}
+\end{algorithm}
+
+Gestion des objets \emph{marqués} selon une file :
+\begin{itemize}
+\item On ajoute les nouveaux sommets marqués à la fin de la file
+\item On retire le sommet du début de la file une fois qu'il est examiné
+\end{itemize}
+
+\subsection*{Parcours en profondeur DFS}
+
+Soit \GXA et $r\in X$.
+\begin{flushright}
+{\footnotesize
+{\color{blue} cas préfixe} \\
+{\color{red} cas postfixe}
+}
+\end{flushright}
+\begin{algorithm}[H]
+marquer $x$\;
+{\color{blue} attribuer à $x$ le numéro préfixe courant}\;
+\For{$(x,y)\in A$}
+{
+	traverser $(x,y)$\;
+	\If{$y$ non marqué}
+	{
+		père($y$) $\longleftarrow x$\;
+		appliquer DFS à $x$\;
+	}
+}
+{\color{red} attribuer à $x$ le numéro postfixe courant}\;
+\caption{DFS($x$)}
+\end{algorithm}
 
 \section*{Flux et flots}
 \newcommand{\Sb}{\overline{S}}
