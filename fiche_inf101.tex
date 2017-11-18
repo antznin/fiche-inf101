@@ -105,7 +105,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
 
 \section*{Tri}
 
-\newcommand{\GO}{\mathcal{O}}
+\newcommand{\GO}{\text{O}}
 
 \textbf{Problème :} On dispose d'une collection de $n$ éléments, on souhaite les ordonner sous forme croissante.
 
@@ -121,7 +121,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
   }
   $T\left[j\right] \longleftarrow cle$ \;
  }
- \caption{Tri Insertion}
+ \caption{Tri Insertion $\GO(n^2)$}
 \end{algorithm}
 
 \textbf{Tri sélection :} On cherche le plus petit élément, on le met à la 1\iere position; on cherche le 2\ieme plus petit, et etc$\hdots$
@@ -139,7 +139,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
   	échanger($T$, $i$, $indicePetit$) \;
   }
  }
- \caption{Tri Sélection}
+ \caption{Tri Sélection $\GO(n^2)$}
 \end{algorithm}
 
 \textbf{Tri rapide :} On utilise une fonction nommée $partition$ sur une liste qui sélectionne une donnée $cle$, et qui range les données plus petites que $cle$ à gauche de $cle$, puis range à droite de $cle$ les éléments plus grand que $cle$. Il est défini récursivement la plupart du temps.
@@ -168,11 +168,11 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
  	tri\_rapide($g$,$j-1$)\;
  	tri\_rapide($j+1$,$d$)\;
  }
- \caption{tri\_rapide($g$,$d$)}
+ \caption{tri\_rapide($g$,$d$) $\GO(n\log n)$}
 \end{algorithm}
 \medskip
 
-\textbf{Tri par arbre binaire de recherche (ABR) $\mathcal{O}(n^2)$:} arbre binaire vérifiant :
+\textbf{Tri par arbre binaire de recherche (ABR) :} arbre binaire vérifiant :
 \begin{changemargin}{0.5cm}{0.5cm} 
 \begin{center}
 $\forall N\in A$, la clé de $N$ est $\geqslant$ aux clés du sous-arbre gauche de $N$ et $\leqslant$ aux clés du sous-arbre droit de $N$.
@@ -185,10 +185,10 @@ Le tri ABR se décompose en deux étapes :
 \item Parcours de l'ABR
 \end{enumerate}
 
-Un parcours infixe trie les clés de l'ABR.
+Un parcours infixe trie les clés de l'ABR, le tout en $\GO(n^2)$.
 
 \medskip
-\textbf{Tri tas $\mathcal{O}(n\log(n))$ :} on définit un tas comme un arbre dont les clés vérifient :
+\textbf{Tri tas :} on définit un tas comme un arbre dont les clés vérifient :
 \begin{changemargin}{0.5cm}{0.5cm} 
 \begin{center}
 $\forall N\in A$, la clé de $N$ est $\geqslant$ à la clé des fils de $N$.
@@ -244,8 +244,6 @@ Principe du tri : on échange la racine avec la dernière feuille du tas. L'ex-r
  \caption{descente$(q,p)$}
 \end{algorithm}
 
-On définit alors le tri tas :
-
 \begin{algorithm}[H]
  \KwData{$p$ est un entier}
   \For{$2\leqslant p\leqslant n$, $p\leftarrow p+1$}
@@ -257,7 +255,7 @@ On définit alors le tri tas :
   	échanger$(T,1,p)$ \;
   	descente$(1,p-1)$ \;
   }
- \caption{Tri tas}
+ \caption{Tri tas $\GO(n\log(n))$}
 \end{algorithm}
 
 \section*{Fonctions de hachage}
@@ -401,7 +399,6 @@ Codage d'un graphe :
 	 f & \longrightarrow & b,-1 & \longrightarrow & c,4 &  &  &  & 
 	 \end{smallmatrix}  \]
 \end{itemize}
-\textbf{Algorithme de \textsc{Krusgal} :}
 
 \subsection*{Graphe Orientés}
 Un graphe orienté \GXA est un couple d'ensembles finis avec :
@@ -447,6 +444,44 @@ Exemple :
 \end{center}
 
 On définit alors de manière analogue la matrice d'adjacence de $G$. La liste d'adjacence distingue la liste des successeurs et la liste des prédécesseurs. 
+
+\subsection*{Arbre couvant de poids minimum}
+
+Étant donné un graphe $G$ non-orienté et pondéré, on cherche un arbre couvant de poids minimum sur ce graphe. 
+
+On utilise l'algorithme de \textsc{Krusgal} qui consiste, pour un graphe \emph{connexe} de $n$ sommets, à sélectionner à chaque itération une nouvelle arête du graphe qui ne crée pas de cycle. Il se déroule en deux étapes :
+\begin{enumerate}
+\item trier les arêtes par ordre croissant
+\item tant que l'on a pas retenu $n-1$ arêtes, on procède de la sorte : considérer, dans l'ordre du tri, la première arête non examinée, puis appliquer la condition du paragraphe ci-dessus
+\end{enumerate}
+
+\newcommand{\CC}{\text{CC}}
+\begin{algorithm}[H]
+\KwData{$T$ l'arbre couvant de poids minimum}
+ Trier les arêtes $\longrightarrow L$ \;
+ \For{$i$ de 1 à $n$}{
+ 	$\CC(i) \longleftarrow i$ \;
+ }
+ $ComptL \longleftarrow 1$ \;
+ $ComptT \longleftarrow 0$ \;
+ \While{$CompteurT < n-1$}{
+ 	Soit $\{x,y\}$ l'arête $L\left[ComptL\right]$\;
+ 	$ComptL \longleftarrow ComptL + 1$\;
+ 	\If{$\CC(x) \neq \CC(y)$}{
+ 		$ComptT \longleftarrow ComptT +1$\;
+ 		$T(ComptT) \longleftarrow \{x,y\}$\;
+ 		$aux \longleftarrow \CC(y)$\;
+ 		\For{$i$ de 1 à $n$}{
+ 			\If{$\CC(i) = aux$}
+ 			{
+ 				$\CC(i) \leftarrow \CC(x)$\;
+ 			}
+ 		}
+ 	}
+ }
+ 
+ \caption{Algo. de Krusgal $\GO(n^2+m\log m)$}
+\end{algorithm}
 
 \section*{Plus courts chemins}
 
