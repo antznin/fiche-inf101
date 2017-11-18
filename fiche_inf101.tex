@@ -104,6 +104,8 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
 
 \section*{Tri}
 
+\newcommand{\GO}{\mathcal{O}}
+
 \textbf{Problème :} On dispose d'une collection de $n$ éléments, on souhaite les ordonner sous forme croissante.
 
 \textbf{Tri insertion :} \`{A} la $i$\ieme étape, on considère les $i$ premier éléments triés, l'élément $i+1$ est alors inséré dans les éléments déjà triés par comparaison.
@@ -167,24 +169,115 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
  }
  \caption{tri\_rapide($g$,$d$)}
 \end{algorithm}
+\medskip
 
-\begin{tikzpicture}
-\node {root}
-[level distance=7mm,
-level 1/.style={sibling distance=20mm},
-level 2/.style={sibling distance=10mm},
-level 3/.style={sibling distance=5mm}]
-child {node {left}
-	child { node {child}}
-	child {node {child}}
-	}
-child {node {right}
-	child {node {child}}
-	child {node {child}}
-};
-\end{tikzpicture}
+\textbf{Tri par arbre binaire de recherche (ABR) $\mathcal{O}(n^2)$:} arbre binaire vérifiant :
+\begin{changemargin}{0.5cm}{0.5cm} 
+\begin{center}
+$\forall N\in A$, la clé de $N$ est $\geqslant$ aux clés du sous-arbre gauche de $N$ et $\leqslant$ aux clés du sous-arbre droit de $N$.
+\end{center}
+\end{changemargin}
+
+Le tri ABR se décompose en deux étapes :
+\begin{enumerate}
+\item Construction de l'ABR 
+\item Parcours de l'ABR
+\end{enumerate}
+
+Un parcours infixe trie les clés de l'ABR.
+
+\medskip
+\textbf{Tri tas $\mathcal{O}(n\log(n))$ :} on définit un tas comme un arbre dont les clés vérifient :
+\begin{changemargin}{0.5cm}{0.5cm} 
+\begin{center}
+$\forall N\in A$, la clé de $N$ est $\geqslant$ à la clé des fils de $N$.
+\end{center}
+\end{changemargin}
+
+Le tri tas se décompose en deux étapes :
+\begin{enumerate}
+\item construction du tas en $\GO(n\log(n))$
+\item exploitation du tas en $\GO(n\log(n))$
+\end{enumerate}
+
+D'où la complexité en $\GO(n\log(n))$.
+
+\begin{algorithm}[H]
+ \KwData{$i$ est un entier et $cle$ est du même type que les données du tas}
+  $i \longleftarrow p$ \;
+  $cle \longleftarrow T\left[p\right]$ \;
+  \While{$i \geqslant 2$ \text{et} $cle \geqslant T\left[\lfloor\frac{i}{2}\rfloor\right]$}{
+  	$T\left[i\right]  \longleftarrow T\left[\lfloor\frac{i}{2}\rfloor\right]$ \;
+  	$i \longleftarrow \lfloor\frac{i}{2}\rfloor$ \;
+  	}
+  	$T\left[i\right] \longleftarrow cle$ \;
+ \caption{montée$(p)$}
+\end{algorithm}
+
+Principe du tri : on échange la racine avec la dernière feuille du tas. L'ex-racine est à la fin du tableau, on n'y touche plus. On va alors reconstruire le tas avec les données restantes en faisant descendre la donnée échangée.
+
+\newcommand{\ig}{indice\_ grand}
+\begin{algorithm}[H]
+ \KwData{$p$ est le nombre de données et la donnée d'indice $q$ est diminuée}
+  $trouve \longleftarrow FAUX$ \;
+  $i \longleftarrow q$ \;
+  $cle \longleftarrow T\left[q\right]$ \;
+  \While{not $trouve$ \text{et} $2i\leqslant p$}
+  {
+  	\eIf{$2i==p$}
+  	{$\ig \longleftarrow p$}{
+  		\If{$T\left[2i\right] \geqslant T\left[2i+1\right]$}
+  		{
+  			$\ig \longleftarrow 2i+1$~\;
+  		}
+  	}
+  	\eIf{$cle < T\left[\ig\right]$}
+  	{
+  		$T\left[i\right] \longleftarrow T\left[ \ig \right]$ \;
+  		$i \longleftarrow \ig$ \;
+  	}{
+  	$trouve \longleftarrow VRAI$ \;
+  	}
+  }
+  $T\left[i\right] \longleftarrow cle$ \;
+ \caption{descente$(q,p)$}
+\end{algorithm}
+
+On définit alors le tri tas :
+
+\begin{algorithm}[H]
+ \KwData{$p$ est un entier}
+  \For{$2\leqslant p\leqslant n$, $p\leftarrow p+1$}
+  {
+  	montée$(p)$ \;
+  }
+  \For{$n\geqslant p\geqslant 2$, $p\leftarrow p-1$}
+  {
+  	échanger$(T,1,p)$ \;
+  	descente$(1,p-1)$ \;
+  }
+ \caption{Tri tas}
+\end{algorithm}
+
+%\begin{tikzpicture}
+%\node {root}
+%[level distance=7mm,
+%level 1/.style={sibling distance=20mm},
+%level 2/.style={sibling distance=10mm},
+%level 3/.style={sibling distance=5mm}]
+%child {node {left}
+%	child { node {child}}
+%	child {node {child}}
+%	}
+%child {node {right}
+%	child {node {child}}
+%	child {node {child}}
+%};
+%\end{tikzpicture}
 
 \section*{Codage de \bsc{Huffman}}
+
+
 
 \section*{Théorie des graphes}
 
@@ -451,7 +544,7 @@ $\Rightarrow$ Algorithme de \textsc{Bellman} :
 [title = Diagramme de \textsc{Gantt}, height = 3cm, xlabel = temps, ylabel = ressources, width = 0.3\paperwidth, axis x line = bottom, axis y line =left, ymin = 0, ymax = 2.2, xmin = 0, xmax = 21]
 \addplot+[blue, ybar interval, mark = none] coordinates {(0,1) (7,1) (9,1) (15,1) (20,1) }; 
 \addplot+[blue, ybar interval, mark = none] plot coordinates {(0,2) (3,2)};
-\addplot+[white, mark = none] plot coordinates {(3,0.001) (3,0.99)};
+\addplot+[white, mark = none, very thick] plot coordinates {(3,0.01) (3,0.99)};
 \node at (axis cs:3.5,0.5) [] {$B$};
 \node at (axis cs:8,0.5) [] {$A$};
 \node at (axis cs:12,0.5) [] {$E$};
