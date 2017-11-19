@@ -46,6 +46,9 @@
 
 \begin{document}
 
+
+\renewcommand{\labelitemii}{$\bullet$}
+
 \begin{multicols*}{3}
 \setlength{\parindent}{0pt}
 \maketitle
@@ -93,7 +96,7 @@ Profondeur de $N$ dans $A$ :
 \[
 \begin{array}{rc|l}
 \text{prof}(N) & = & 0 \textit{ si } N=R  \\
- & & \text{prof}(\text{père de }N) \textit{ sinon.}  \\
+ & & \text{prof}(\text{père de }N) + 1 \textit{ sinon.}  \\
 \end{array}
 \]
 
@@ -485,12 +488,41 @@ On utilise l'algorithme de \textsc{Krusgal} qui consiste, pour un graphe \emph{c
 
 \section*{Plus courts chemins}
 
-\subsection*{Cas des graphes sans circuits : algorithme de Bellman}
-
 \newcommand{\pere}{\text{père}}
 \newcommand{\Vm}{V^-}
 \newcommand{\Vp}{V^+}
 \newcommand{\tred}[1]{{\color{red}#1}}
+
+\subsection*{Cas des graphes pondéré positivement : algorithme de Dijkstra}
+\newcommand{\Sb}{\overline{S}}
+\newcommand{\pivot}{\text{pivot}}
+
+$p(a,b)$ est le poids de l'arc $(a,b)$. 
+
+\begin{algorithm}[H]
+
+$S \longleftarrow \{r\}$ \;
+$\pivot \longleftarrow r$ \;
+$\pi(r) \longleftarrow 0$ \;
+$\forall x\neq r, \pi(x) \longleftarrow \infty$\;
+\For{$i$ variant de 1 à $n-1$}
+{
+	\For{$x\in\Sb\cap\Vp(\pivot)$}
+	{
+		\If{$\pi(x) > \pi(\pivot) + p(\pivot,x)$}
+		{
+			$\pi(x) \leftarrow \pi(\pivot) + p(\pivot,x)$\;
+			$\pere(x) \leftarrow \pivot$\;
+		}
+	}
+	déterminer $\pivot\in\Sb$ ($\pi(\pivot) = \min_{x\in\Sb}\pi(x)$)\;
+	$S \longleftarrow S\cup\{\pivot\}$\;
+}
+
+ \caption{Algorithme de \textsc{Dijkstra} $\GO(n^2)$}
+\end{algorithm}
+
+\subsection*{Cas des graphes sans circuits : algorithme de Bellman}
 
 Soit \GXA orienté pondéré par $p\,:\,A\,\rightarrow\,\mathbb{R}$ \emph{sans-circuits}, et un sommet $r\in X$.
 
@@ -621,7 +653,7 @@ $\Rightarrow$ Algorithme de \textsc{Bellman} :
 
 \section*{Parcours de graphes}
 
-\subsection*{Parcours en largeur}
+\subsection*{Parcours \enquote{marquer-examiner}}
 
 Soit \GXA et $r\in X$.
 
@@ -675,7 +707,6 @@ marquer $x$\;
 \end{algorithm}
 
 \section*{Flux et flots}
-\newcommand{\Sb}{\overline{S}}
 
 Soit \GXA un graphe orienté. On dote chaque arc $a$ d'une capacité $c(a)$:
 \[
@@ -850,7 +881,50 @@ Le \textbf{problème 3} est résolu en remplaçant $\{x,y\}$ par $(x,y)$ et $(y,
 
 Le \textbf{problème 4} en résolu grâce au \textbf{problème 2} puis \textbf{1}.
 
+\section*{Complexité des algorithmes}
 
+Soit $\pi$ un problème. Soit $I$ une instance de $\pi$. La taille de $I$, notée $|I|$, est le nombre de bits nécessaires pour décrire $I$.
+
+Pour $I = k\in\mathbb{N}$, $|I| = \lceil\log_2(k+1)\rceil \simeq \log_2 k$. Pour $I = G$ un graphe, avec $M$ la matrice d'adjacence de, $|I| = |M| = n^2$. 
+
+Un algorithme $A$ est dit polynomial si sa complexité $c_A$ peut être majorée par un polynôme en la taille de ses données :
+\[ c_A(|I|) \leqslant Q(|I|) \]
+
+Exemple : tri par ABR en $\GO(n^2)$ avec $I = (a_1,\ldots, a_n)$. $|I| = \sum_{i=1}^n{|a_i|} =\sum_{i=1}^n{\lceil\underbrace{\log_2(a_i+1)}_{\geqslant 1}\rceil} \geqslant n$.\\
+$\Rightarrow$ complexité en $\GO(|I|^2)$.
+\medskip
+
+Un problème est dit polynomial s'il existe un algo. polynomial le résolvant. Comme \enquote{trier des entiers} ou le  \enquote{pcch. dans $G$ pondéré positivement}.
+
+La recherche d'un pcch. dans $G$ pondéré positivement \emph{ou} négativement n'est pas connu pour être polynomial (mais il pourrait l'être un jour !).
+
+On y voit plusieurs types de problèmes :
+\begin{itemize}
+	\item les problèmes d'optimisation, tel que la recherche 		d'un max. ou d'un min..
+	\item les problèmes de décision, exemples :
+	\begin{itemize}
+		\item Nom : cycle eulérien\\
+		Instance : \GXA non-orienté\\
+		$\mathcal{Q}$ : existe-t-il un cycle passant exactement 1 fois par toutes les arêtes de $G$ ?
+		\item Nom : cycle hamiltonien\\
+		Instance : \GXA non-orienté\\
+		$\mathcal{Q}$ : existe-t-il un cycle passant exactement 1 fois par tout les sommets de $G$ ?
+	\end{itemize}
+\end{itemize}
+
+$P = \{\text{pb. de décision polynomiaux}\}$\\
+$N\!P = \{$pb. de décision pour lesquels on peut vérifier en temps polynomial qu'une solution proposée par un devin donne bien la réponse \enquote{oui}$\}$
+\begin{itemize}
+	\item cycle eulérien $\in P$
+	\item cycle eulérien $\not\in P$ mais $\in N\!P$. Effectivement, sur certains graphes, on pet repérer un cycle hamiltonien à vue d'œil.
+\end{itemize}
+
+Un problème de décision est dit NP-complet si :
+\begin{enumerate}
+	\item $\pi \in N\!P$
+	\item polynomialité de $\pi$ entraînerait $P = N\!P$
+\end{enumerate}
+Il est dit NP-difficile si sa polynomialité entrainerait $P = N\!P$.
 
 \end{multicols*}
 \end{document}
