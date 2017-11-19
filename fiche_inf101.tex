@@ -68,22 +68,22 @@ c_A & : & \mathbb{N} & \to & \mathbb{N} \\
 
 \section*{Structures de Données}
 
-\textbf{Variables:} emplacement précis en mémoire. Possède une adresse et une taille variable.
+\textbf{Variable :} emplacement précis en mémoire. Possède une adresse et une taille variable.
 
-\textbf{Tableau:} collection de variables. Contient des cases numérotées. Caractérisé par :\begin{itemize}
+\textbf{Tableau :} collection de variables. Contient des cases numérotées. Caractérisé par :\begin{itemize}
 \item son adresse
 \item sa taille
 \item nature des entités conservées (de même type pour un tableau).
 \end{itemize}
 On accède à l'adresse via :\\ $ T\left[ i\right] = T\left[ 0\right] + i\times t $. ($t$ : taille).
 
-\textbf{Listes chaînées :} suite de données homogènes (même type) auxquelles on accède de proche en proche, chaque donnée contenant l'adresse de l'élément suivant. Avantage : pas de problème de dimensionnement. Inconvénient : plus d'accès direct.
+\textbf{Liste chaînée :} suite de données homogènes (même type) auxquelles on accède de proche en proche, chaque donnée contenant l'adresse de l'élément suivant. Avantage : pas de problème de dimensionnement. Inconvénient : plus d'accès direct.
 
 \textbf{Pile :} collection ordonnée de données respectant la stratégie \enquote{Last in, first out} (LIFO).
 
 \textbf{File :} De même, \enquote{First in, first out} (FIFO).
 
-\textbf{Arbres :} Un arbre $A$ est de la forme $A = (R, \underbrace{A_1, \ldots, A_k}_{\text{Arbres}})$. $R$ est la racine l'arbre $A$.\\
+\textbf{Arbre :} Un arbre $A$ est de la forme $A = (R, \underbrace{A_1, \ldots, A_k}_{\text{Arbres}})$. $R$ est la racine l'arbre $A$.\\
 Terminologie : Soit $N$ un nœud de $A$.
 \begin{itemize}
 \item Les fils de $N$ sont les racines des sous-arbres de $N$;
@@ -112,7 +112,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
 
 \textbf{Problème :} On dispose d'une collection de $n$ éléments, on souhaite les ordonner sous forme croissante.
 
-\textbf{Tri insertion :} \`{A} la $i$\ieme étape, on considère les $i$ premier éléments triés, l'élément $i+1$ est alors inséré dans les éléments déjà triés par comparaison.
+\textbf{Tri insertion :} \`{A} la $i$\ieme étape, on considère les $i$ premiers éléments triés, l'élément $i+1$ est alors inséré dans les éléments déjà triés par comparaison.
 \begin{algorithm}[H]
  \KwData{$T$ tableau d'indices 1 à $n$}
  \For{$i$ variant de 2 à $n$}{
@@ -127,7 +127,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
  \caption{Tri Insertion $\GO(n^2)$}
 \end{algorithm}
 
-\textbf{Tri sélection :} On cherche le plus petit élément, on le met à la 1\iere position; on cherche le 2\ieme plus petit, et etc$\hdots$
+\textbf{Tri sélection :} On cherche le plus petit élément, on le met à la 1\iere position; on cherche le 2\ieme plus petit, etc.
 
 \begin{algorithm}[H]
  \KwData{$T$ tableau d'indices 1 à $n$}
@@ -145,7 +145,7 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
  \caption{Tri Sélection $\GO(n^2)$}
 \end{algorithm}
 
-\textbf{Tri rapide :} On utilise une fonction nommée $partition$ sur une liste qui sélectionne une donnée $cle$, et qui range les données plus petites que $cle$ à gauche de $cle$, puis range à droite de $cle$ les éléments plus grand que $cle$. Il est défini récursivement la plupart du temps.
+\textbf{Tri rapide :} On utilise une fonction nommée $partition$ sur une liste qui sélectionne une donnée $cle$, et qui range les données plus petites que $cle$ à gauche de $cle$, puis range à droite de $cle$ les éléments plus grands que $cle$. Il est défini récursivement la plupart du temps.
 \begin{algorithm}[H]
  \KwData{Données du tableau $T$ entre les indices $g$ et $d$}
   $cle \longleftarrow T\left[g\right]$ \;
@@ -267,7 +267,7 @@ Pour gérer une collision en hachage, on peut faire appel à un  \enquote{hachag
 
 \section*{Codage de \bsc{Huffman}}
 
-\textbf{Problème :} on souhaite envoyer un texte en l'envoyant en binaire afin d'optimiser la longueur du texte codé.
+\textbf{Problème :} on souhaite envoyer un texte sous forme binaire afin d'optimiser la longueur du texte codé.
 
 \newcommand{\occ}{\text{occ}}
 \newcommand{\lng}{\text{l}}
@@ -277,7 +277,7 @@ On définit :
 \item $\lng(x) =$ longueur de $x$
 \end{itemize}
 
-Le codage respecte la \textbf{règle du préfixe} : toute codage de caractère ne peut être le préfixe du codage d'un autre caractère. On associe un arbre binaire à ce codage dont les feuilles correspondent au caractère et chaque branche gauche représente un 0 et chaque branche droite représente un 1.
+Le codage respecte la \textbf{règle du préfixe} : tout codage de caractère ne peut être le préfixe du codage d'un autre caractère. On associe un arbre binaire à ce codage dont les feuilles correspondent au caractère et chaque branche gauche représente un 0 et chaque branche droite représente un 1.
 
 Long. du texte :
 $L = \sum_{x}{\occ(x)\times p(x)}$
@@ -448,11 +448,11 @@ Exemple :
 
 On définit alors de manière analogue la matrice d'adjacence de $G$. La liste d'adjacence distingue la liste des successeurs et la liste des prédécesseurs. 
 
-\subsection*{Arbre couvant de poids minimum}
+\subsection*{Arbre couvrant de poids minimum}
 
-Étant donné un graphe $G$ non-orienté et pondéré, on cherche un arbre couvant de poids minimum sur ce graphe. 
+Étant donné un graphe $G$ non-orienté et pondéré, on cherche un arbre couvrant de poids minimum sur ce graphe. 
 
-On utilise l'algorithme de \textsc{Krusgal} qui consiste, pour un graphe \emph{connexe} de $n$ sommets, à sélectionner à chaque itération une nouvelle arête du graphe qui ne crée pas de cycle. Il se déroule en deux étapes :
+On utilise l'algorithme de \textsc{Kruskal} qui consiste, pour un graphe \emph{connexe} de $n$ sommets, à sélectionner à chaque itération une nouvelle arête du graphe qui ne crée pas de cycle. Il se déroule en deux étapes :
 \begin{enumerate}
 \item trier les arêtes par ordre croissant
 \item tant que l'on a pas retenu $n-1$ arêtes, on procède de la sorte : considérer, dans l'ordre du tri, la première arête non examinée, puis appliquer la condition du paragraphe ci-dessus
@@ -460,7 +460,7 @@ On utilise l'algorithme de \textsc{Krusgal} qui consiste, pour un graphe \emph{c
 
 \newcommand{\CC}{\text{CC}}
 \begin{algorithm}[H]
-\KwData{$T$ l'arbre couvant de poids minimum}
+\KwData{$T$ l'arbre couvrant de poids minimum}
  Trier les arêtes $\longrightarrow L$ \;
  \For{$i$ de 1 à $n$}{
  	$\CC(i) \longleftarrow i$ \;
@@ -483,7 +483,7 @@ On utilise l'algorithme de \textsc{Krusgal} qui consiste, pour un graphe \emph{c
  	}
  }
  
- \caption{Algo. de Krusgal $\GO(n^2+m\log m)$}
+ \caption{Algo. de Kruskal $\GO(n^2+m\log m)$}
 \end{algorithm}
 
 \section*{Plus courts chemins}
@@ -493,7 +493,7 @@ On utilise l'algorithme de \textsc{Krusgal} qui consiste, pour un graphe \emph{c
 \newcommand{\Vp}{V^+}
 \newcommand{\tred}[1]{{\color{red}#1}}
 
-\subsection*{Cas des graphes pondéré positivement : algorithme de Dijkstra}
+\subsection*{Cas des graphes pondérés positivement : algorithme de Dijkstra}
 \newcommand{\Sb}{\overline{S}}
 \newcommand{\pivot}{\text{pivot}}
 
@@ -522,9 +522,9 @@ $\forall x\neq r, \pi(x) \longleftarrow \infty$\;
  \caption{Algorithme de \textsc{Dijkstra} $\GO(n^2)$}
 \end{algorithm}
 
-\subsection*{Cas des graphes sans circuits : algorithme de Bellman}
+\subsection*{Cas des graphes sans circuit : algorithme de Bellman}
 
-Soit \GXA orienté pondéré par $p\,:\,A\,\rightarrow\,\mathbb{R}$ \emph{sans-circuits}, et un sommet $r\in X$.
+Soit \GXA orienté pondéré par $p\,:\,A\,\rightarrow\,\mathbb{R}$ \emph{sans-circuit}, et un sommet $r\in X$.
 
 \textbf{Problème :} déterminer, pour $x\neq r$, un $\underset{\tred{plch.}}{pcch.}$ de $r$ à $x$.
 
@@ -564,7 +564,7 @@ Une \textbf{numération topologique} de $G$ orienté est une bijection $\varphi\
  
  Soit $T$ un ensemble de $p$ tâches $t_i$ ($1\leqslant i\leqslant p$). Chaque tâche $t_i$ possède une durée $d_i$. On doit respecter des contraintes de la forme : avant de commencer $x$, on doit avoir fini $y$. On peut réaliser les tâches en parallèle.
  
-De quelle façon réaliser chaque tâche de façon à :
+Comment réaliser chaque tâche de façon à :
 \begin{itemize}
 	\item respecter les contraintes
 	\item minimiser la durée totale de réalisation, $\Dmin$.
@@ -672,7 +672,7 @@ Aucun arc n'est traversé\;
 		père$(y) \longleftarrow x$\;
 	}
 }
-\caption{\enquote{Moule} d'un parcours de graphe orientés en largeur}
+\caption{\enquote{Moule} d'un parcours de graphe orienté en largeur}
 \end{algorithm}
 
 Gestion des objets \emph{marqués} selon une file :
@@ -715,7 +715,7 @@ c & : & A & \to & \mathbb{R}^*_+  \\
  & & a & \mapsto & c(a) \\
 \end{array}
 \]
-Soient $s$ et $p$ resp. sources et puits.
+Soient $s$ et $p$ resp. source et puit.
 
 Un flot $f$ est défini par : \begin{enumerate}
 \item $
@@ -807,13 +807,13 @@ On les représente de la sorte :
 
 \subsection*{Théorème de Mayer}
 Soit \GXA un graphe orienté.\\
-\textbf{Problème 1 :} déterminer le nombre minimum d'\textit{arcs} à retirer $G$ pour laisser un graphe fortement connexe $=$ forte arc-connectivité.\\
+\textbf{Problème 1 :} déterminer le nombre minimum d'\textit{arcs} à retirer de $G$ pour laisser un graphe fortement connexe $=$ forte arc-connectivité.\\
 \textbf{Problème 2 :} de même mais en enlevant des \textit{sommets} $=$ forte sommet-connectivité.\\
 \textbf{Problème 3 \textit{\&} 4 :} mêmes problèmes avec $G$ non-orienté.
 
 On résout le \textbf{problème 1} à l'aide des flots.
 
-On définit $C_1$ et $C_2$ comme étant \emph{arcs-disjoints} s'il n'ont pas d'arêtes en commun.
+On définit $C_1$ et $C_2$ comme étant \emph{arcs-disjoints} s'il n'ont pas d'arête en commun.
 
 \underline{\smash{Sous-problème :}} Soit $a$ et $b$ 2 sommets de $G$. Déterminer le minimum $N(a,b)$ d'arcs à retirer afin de plus avoir de chemin de $a$ vers $b$.\\
 Posons $P(a,b)$ le nombre maximum de chemin arc-disjoint de $a$ vers $b$.
@@ -877,7 +877,7 @@ $\Downarrow$
 \end{center}
 Puis on résout le problème 1 avec le graphe obtenu.
 
-Le \textbf{problème 3} est résolu en remplaçant $\{x,y\}$ par $(x,y)$ et $(y,x)$. Attention, après la recherche d'arcs-disjoints il faut ré-ajuster les arcs afin d'y transformer en graphe non-orienté.
+Le \textbf{problème 3} est résolu en remplaçant $\{x,y\}$ par $(x,y)$ et $(y,x)$. Attention, après la recherche d'arcs-disjoints il faut ré-ajuster les arcs afin de le transformer en graphe non-orienté.
 
 Le \textbf{problème 4} en résolu grâce au \textbf{problème 2} puis \textbf{1}.
 
@@ -900,7 +900,7 @@ La recherche d'un pcch. dans $G$ pondéré positivement \emph{ou} négativement 
 
 On y voit plusieurs types de problèmes :
 \begin{itemize}
-	\item les problèmes d'optimisation, tel que la recherche 		d'un max. ou d'un min..
+	\item les problèmes d'optimisation, tel que la recherche d'un max. ou d'un min.
 	\item les problèmes de décision, exemples :
 	\begin{itemize}
 		\item Nom : cycle eulérien\\
@@ -916,7 +916,7 @@ $P = \{\text{pb. de décision polynomiaux}\}$\\
 $N\!P = \{$pb. de décision pour lesquels on peut vérifier en temps polynomial qu'une solution proposée par un devin donne bien la réponse \enquote{oui}$\}$
 \begin{itemize}
 	\item cycle eulérien $\in P$
-	\item cycle eulérien $\not\in P$ mais $\in N\!P$. Effectivement, sur certains graphes, on pet repérer un cycle hamiltonien à vue d'œil.
+	\item cycle eulérien $\not\in P$ mais $\in N\!P$. Effectivement, sur certains graphes, on peut repérer un cycle hamiltonien à vue d'œil.
 \end{itemize}
 
 Un problème de décision est dit NP-complet si :
