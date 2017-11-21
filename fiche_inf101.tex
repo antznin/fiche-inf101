@@ -109,22 +109,22 @@ Hauteur de $A$ : $h = \displaystyle \max_{N\in A}\left(\text{prof}(N)\right).$
 
 \newcommand{\GO}{\text{O}}
 
-\textbf{Problème :} On dispose d'une collection de $n$ éléments, on souhaite les ordonner sous forme croissante.
-
-\textbf{Tri insertion :} \`{A} la $i$\ieme étape, on considère les $i$ premier éléments triés, l'élément $i+1$ est alors inséré dans les éléments déjà triés par comparaison.
-\begin{algorithm}[H]
- \KwData{$T$ tableau d'indices 1 à $n$}
- \For{$i$ variant de 2 à $n$}{
-  $j \longleftarrow i$ \;
-  $cle \longleftarrow T\left[j\right]$ \;
-  \While{$j \geqslant 2$ et $T\left[j\right] > cle$}{
-  	$T\left[j\right] \longleftarrow T\left[j-1\right]$ \;
-  	$j \longleftarrow j-1$ \;
-  }
-  $T\left[j\right] \longleftarrow cle$ \;
- }
- \caption{Tri Insertion $\GO(n^2)$}
-\end{algorithm}
+%\textbf{Problème :} On dispose d'une collection de $n$ éléments, on souhaite les ordonner sous forme croissante.
+%
+%\textbf{Tri insertion :} \`{A} la $i$\ieme étape, on considère les $i$ premier éléments triés, l'élément $i+1$ est alors inséré dans les éléments déjà triés par comparaison.
+%\begin{algorithm}[H]
+% \KwData{$T$ tableau d'indices 1 à $n$}
+% \For{$i$ variant de 2 à $n$}{
+%  $j \longleftarrow i$ \;
+%  $cle \longleftarrow T\left[j\right]$ \;
+%  \While{$j \geqslant 2$ et $T\left[j\right] > cle$}{
+%  	$T\left[j\right] \longleftarrow T\left[j-1\right]$ \;
+%  	$j \longleftarrow j-1$ \;
+%  }
+%  $T\left[j\right] \longleftarrow cle$ \;
+% }
+% \caption{Tri Insertion $\GO(n^2)$}
+%\end{algorithm}
 
 \textbf{Tri sélection :} On cherche le plus petit élément, on le met à la 1\iere position; on cherche le 2\ieme plus petit, et etc$\hdots$
 
@@ -279,7 +279,7 @@ On définit :
 Le codage respecte la \textbf{règle du préfixe} : toute codage de caractère ne peut être le préfixe du codage d'un autre caractère. On associe un arbre binaire à ce codage dont les feuilles correspondent au caractère et chaque branche gauche représente un 0 et chaque branche droite représente un 1.
 
 Long. du texte :
-$L = \sum_{x}{\occ(x)\times p(x)}$
+$L = \sum_{x}{\occ(x)\times p(x)}$ avec $p$ la profondeur du caractère dans l'arbre.
 
 \textbf{Propositions :}
 \begin{enumerate}
@@ -287,6 +287,10 @@ $L = \sum_{x}{\occ(x)\times p(x)}$
 \item $\exists$ un arbre optimal dans lequel les 2 caractères les moins fréquents ($\alpha$ \& $\beta$) sont associés aux feuilles de profondeur maximum
 \item Idem, avec $\alpha$ et $\beta$ de même père, donc frères
 \end{enumerate}
+
+Description de l'algorithme de \textsc{Huffman} :
+
+On range dans $T$ les caractères par ordre décroissant de leur occurrence. On considère $T\left[n-1\right],\, T\left[n\right] = x,\,y$, les caractères avec le minimum d'occurrence. On crée le nœud $x+y$, qui devient ensuite un nœud ayant comme fils gauche $x$ et fils droit $y$. On remanie alors $T$ afin de place le nœud $x+y$ au bon endroit de la liste relativement à leurs occurrences \emph{sommées}.
 
 %\begin{center}
 %\begin{tikzpicture}
@@ -729,7 +733,7 @@ $
 \end{enumerate}
 
 On définit ainsi
-\[v(f) = \displaystyle\sum_{z\in V^+(s)}{f(s,z)} - \sum_{y\in V^-(x)}{f(y,s)} \]
+\[v(f) = \displaystyle\sum_{z\in V^+(s)}{f(s,z)} - \sum_{y\in V^-(x)}{f(y,scd)} \]
 
 \subsection*{Problème de la coupe minimum}
 Soit $G$ orienté, $c\, :\, A\, \rightarrow\, \mathbb{R}^*_+$, $s$ et $p$.
